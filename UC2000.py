@@ -1,10 +1,8 @@
 import time
 
-try:
-    from .Message import Message
-except ImportError:
-    from Message import Message
-
+# =============================================================================
+# Parameters for UC2000 object
+# =============================================================================
 # Minimum step size of PWM percent
 PERCENT_STEP =          0.5
 # Transforming PWM percent incompatible without checksum to compatible ones
@@ -28,110 +26,111 @@ UC2000_DEFAULT_SETTINGS = {
 # TODO: set defaults list into controller as argument for changable settings
 
 class UC2000Controller:
-    def __init__(self, model: int, open_labjack=False):
-        """
-        An interface to SYNRAD 48 series CO2 lasers through UC-2000 controller.
+    """
+    An interface to SYNRAD 48 series CO2 lasers through UC-2000 controller.
 
-        Communication to the UC-2000 controller from a host using REMOTE
-        settings are facilitated through the Serial RS-232 protocol and port.
+    Communication to the UC-2000 controller from a host using REMOTE
+    settings are facilitated through the Serial RS-232 protocol and port.
 
-        Parameters
-        ----------
-        model : {25, 50}
-            SYNRAD 48 series laser model number, indicates the maximum
-            optical power output
-        open_labjack : LabJack object
-            A LabJack object to transmit messages to the UC-2000, 
-            by default False.
+    Parameters
+    ----------
+    model : {25, 50}
+        SYNRAD 48 series laser model number, indicates the maximum
+        optical power output
+    open_labjack : LabJack object
+        A LabJack object to transmit messages to the UC-2000, 
+        by default False.
 
-        Attributes
-        ----------
-        lase
-        percent
-        pwm_freq
-        gate_logic
-        max_pwm
-        lase_on_power_up
-        mode
-        checksum
-        max_power
-        power
-        model
-        open_labjack
-        PARAMETER_NAME_hist : list
-            Entire history of previous PARAMETER_NAME from instantiation.
+    Attributes
+    ----------
+    lase
+    percent
+    pwm_freq
+    gate_logic
+    max_pwm
+    lase_on_power_up
+    mode
+    checksum
+    max_power
+    power
+    model
+    open_labjack
+    PARAMETER_NAME_hist : list
+        Entire history of previous PARAMETER_NAME from instantiation.
 
-        Methods
-        -------
-        reset()
-            Reset all UC-2000 to default.
-        shoot(shot_percent, shot_time, num_shots)
-            Fires a number of shots of a given optical power percent for a 
-            given time.
+    Methods
+    -------
+    reset()
+        Reset all UC-2000 to default.
+    shoot(shot_percent, shot_time, num_shots)
+        Fires a number of shots of a given optical power percent for a 
+        given time.
 
-        Notes
-        -----
-        Pins 2, 3, and 5 of a serial port are used for receive, transmit, and 
-        ground respectively.
-        The host serial port configuration must be
-            Baud rate       9600
-            Data bits       8 bits
-            Parity          None
-            Stop bits       1 bit
-            Flow control    None
+    Notes
+    -----
+    Pins 2, 3, and 5 of a serial port are used for receive, transmit, and 
+    ground respectively.
+    The host serial port configuration must be
+        Baud rate       9600
+        Data bits       8 bits
+        Parity          None
+        Stop bits       1 bit
+        Flow control    None
 
-        For further details please refer to:
-        https://synrad.com/en/products/accessories/uc-2000
+    For further details please refer to:
+    https://synrad.com/en/products/accessories/uc-2000
 
-        Messages are sent to the UC-2000 from the host via a DAQ, in this case
-        a LabJack T4/T7 is used. However, any source that can produce RS-232 
-        asynchronous communication can be used. If a Labjack object or no other
-        DAQ is provided then the UC-2000 only stores messages.
+    Messages are sent to the UC-2000 from the host via a DAQ, in this case
+    a LabJack T4/T7 is used. However, any source that can produce RS-232 
+    asynchronous communication can be used. If a Labjack object or no other
+    DAQ is provided then the UC-2000 only stores messages.
 
-        TODO: LUA scripting - call script to improve timings
-        TODO: gate pull-up/down, SYNRAD doesn't know whether gate or comamnd signal activate lasing is faster. Trial and error?
+    TODO: LUA scripting - call script to improve timings
+    TODO: gate pull-up/down, SYNRAD doesn't know whether gate or comamnd signal activate lasing is faster. Trial and error?
 
-        TODO: receiving communication from the labjack... or using the UC2000 response
-            if check_ack:
-                daq_response = daq_stats["response"]
+    TODO: receiving communication from the labjack... or using the UC2000 response
+        if check_ack:
+            daq_response = daq_stats["response"]
 
-                if not isinstance(daq_response, list):
-                    daq_response = [daq_response]
+            if not isinstance(daq_response, list):
+                daq_response = [daq_response]
 
-                if UC2000_RESPONSE["ack"] in daq_response:
-                    self.laser_controller.set_any(setting, option)
-                    gui_message = "\"{0}\" has changed to \"{1}\"".format(setting, option)
-                    action = "continue"
-                    outcome = option
-                elif UC2000_RESPONSE["nak"] in daq_response:
-                    gui_message = "\"{0}\" remains unchanged as {1} because UC2000 didn't accept the message".format(setting, prev)
-                    action = "previous"
-                    outcome = prev
-                else:
-                    gui_message = "Setting \"{0}\" remains unchanged as {1} because there has been no response from UC2000".format(setting, prev)
-                    action = "previous"
-                    outcome = prev
-            else:
+            if UC2000_RESPONSE["ack"] in daq_response:
                 self.laser_controller.set_any(setting, option)
-                gui_message = "Setting \"{0}\" has changed to \"{1}\"".format(setting, option)
+                gui_message = "\"{0}\" has changed to \"{1}\"".format(setting, option)
                 action = "continue"
                 outcome = option
+            elif UC2000_RESPONSE["nak"] in daq_response:
+                gui_message = "\"{0}\" remains unchanged as {1} because UC2000 didn't accept the message".format(setting, prev)
+                action = "previous"
+                outcome = prev
+            else:
+                gui_message = "Setting \"{0}\" remains unchanged as {1} because there has been no response from UC2000".format(setting, prev)
+                action = "previous"
+                outcome = prev
+        else:
+            self.laser_controller.set_any(setting, option)
+            gui_message = "Setting \"{0}\" has changed to \"{1}\"".format(setting, option)
+            action = "continue"
+            outcome = option
 
-        TODO: test with slightly longer wait time between asynch communications
-        TODO: can send remote status byte inbetween start and end transmission byte of any other
-        command - maybe use to check option on laser
+    TODO: test with slightly longer wait time between asynch communications
+    TODO: can send remote status byte inbetween start and end transmission byte of any other
+    command - maybe use to check option on laser
 
-        Examples
-        --------
-        >>> laser = UC2000Controller(model=25)
-        >>> with laser:
-        ...     laser.percent = 20
-        ...     laser.lase = True
-        ...     laser.percent = 0
-        ...     laser.lase = False
+    Examples
+    --------
+    >>> laser = UC2000Controller(model=25)
+    >>> with laser:
+    ...     laser.percent = 20
+    ...     laser.lase = True
+    ...     laser.percent = 0
+    ...     laser.lase = False
 
-        Demonstration of the .percent and .lase commands
-        """
+    Demonstration of the .percent and .lase commands
+    """
+    def __init__(self, model: int, open_labjack=False):
+        """Inits a UC2000 object."""
         self.model = model
 
         self._open_labjack = open_labjack
@@ -637,3 +636,222 @@ class UC2000Controller:
         self.lase = False
         self.shot_time_hist += [shot_time]*num_shots
         return interval_metrics
+
+
+# =============================================================================
+# Parameters for Message object
+# =============================================================================
+# Start transmission byte (STX)
+START_BYTE =            0x5b
+STATUS_REQUEST_BYTE =   0x7e
+SET_PERCENT_BYTE =      0x7f
+
+UC2000_COMMAND_BYTES = {
+    "pwm_freq": {
+        5: 0x77,
+        10: 0x78,
+        20: 0x7a
+    },
+    "gate_logic": {
+        "up": 0x7a,
+        "down": 0x7b
+    },
+    "max_pwm": {
+        95: 0x7c,
+        99: 0x7d,
+    },
+    "lase_on_power_up": {
+        True: 0x30,
+        False: 0x31
+    },
+    "mode" : {
+        "manual": 0x70,
+        "anc": 0x71,
+        "anv": 0x72,
+        "man_closed": 0x73,
+        "anv_closed": 0x74,
+    },
+    "lase": {
+        True: 0x75,
+        False: 0x76,
+    },
+}
+
+class Message():
+    """
+    REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial 
+    port.
+
+    Parameters
+    ----------
+    command : {"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up",
+                "mode", "lase", "percent", "status_request"}
+        Command byte.
+    data : float
+        Data for PWM (or SET for closed loop) command.
+    checksum : bool
+        Checksum protocol mode.
+
+    Attributes
+    ----------
+    command
+    data
+    checksum
+    message_bytes
+
+    Methods
+    -------
+    add_no_carry(*args)
+
+    Notes
+    -----
+    There are 5 types of messages with different formats sent;
+        Setup ("pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up")
+        Mode ("mode")
+        PWM (or closed loop SET) ("percent")
+        Lase ("lase")
+        Status Request
+
+    Setup Mode, and Lase commands have the byte sequence:
+        STX<Command><Checksum>
+        STX - start transmission byte.
+        The checksum byte is the one's compliment of the Command byte.
+
+    PWM (or SET) command byte sequence:
+        STX<Command><Data Byte><Checksum>
+        Data byte is the PWM percentage multipled by 2, converted into hex.
+        The checksum byte is the adding without carry between command and
+        data byte and then performing the one's compliment.
+
+    Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK
+    (0x3F). A NAK is sent if there is no valid command or checksum byte
+    sent within 1s of STX byte or if the checksum byte is wrong.
+
+    Status Request:
+        Single byte to tell UC-2000 to report it's status.
+    
+    Response from Status Request is
+        ACK<Status Byte1><Status Byte2><PWM Byte><Power Byte><Checksum>
+        Refer to the UC-2000 manual for futher details about the contents
+        of the response bytes. Currently not using so not as important.
+
+    TODO: include parsing response byte from UC-2000
+
+    Examples
+    --------
+    >>> message = Message("percent", 10, False)
+    >>> message.message_bytes()
+    [126, 127, 20]
+
+    Create message for setting PWM percent to 10%.
+
+    >>> message = Message("lase", True, False)
+    >>> message.message_bytes()
+    [126, 127, 117]
+
+    Create message for turning on command signal.
+    """
+    def __init__(self, command: str, data, checksum: bool):
+        """Inits a Message object."""
+        self.command = command
+        self.checksum = checksum
+        self.data = data
+
+    @property
+    def message_bytes(self):
+        """
+        Creates and returns REMOTE message byte sequence.
+
+        Returns
+        -------
+        message : list of int
+            The message sequence containing the start byte, command byte, 
+            [data byte (optional)], and checksum (optional)
+        """
+        if self.command in UC2000_COMMAND_BYTES.keys():
+            command_byte = UC2000_COMMAND_BYTES[self.command][self.data]
+
+            message = [START_BYTE, command_byte]
+
+            if self.checksum:
+                # without data, the checksum is the one's compliment of the 
+                # command byte
+                checksum_byte = ~command_byte & 0xff
+                message.append(checksum_byte)
+
+        elif self.command == "percent":
+            try:
+                message = [START_BYTE, SET_PERCENT_BYTE, int(2*self.data)]
+            except ValueError:
+                raise ValueError("Type of data is invalid. Needs to be float or int.")
+
+            if self.checksum:
+                # with data, the checksum is the addition without carry of the 
+                # command and data byte and then one's complimented
+                checksum_byte = (
+                    ~Message.add_no_carry(SET_PERCENT_BYTE, self.data) & 0xff
+                    )
+                message.append(checksum_byte)
+
+        elif self.command == "status_request":
+            message = [STATUS_REQUEST_BYTE]
+
+        else:
+            raise ValueError("Command is not recognised by UC-2000")
+
+        return message
+
+    @staticmethod
+    def add_no_carry(*args):
+    """
+    Addition without carry; addition is not carried to the next decimal up.
+
+    Parameters
+    ----------
+    *args : iterable (not string)
+        Iterate of ints to add without carry.
+
+    Returns
+    -------
+    final_sum : int
+        the result...
+
+    Examples
+    --------
+    >>> add_no_carry(1, 1)
+    2
+
+    >>> add_no_carry(1, 18)
+    19
+
+    >>> add_no_carry(1, 19)
+    10
+
+    The '10'is not carried over to the next decimal.
+    """
+    num_digits = []
+    
+    for arg in args:
+        num_digits.append(len(str(arg)))
+    
+    max_digits = max(num_digits) 
+    # list comprehension way
+    # max_digits = max([len(str(arg)) for arg in args])
+    final_sum = 0
+    
+    for pwr in range(1, max_digits + 1): # iterate through ea decimal
+        result_no_carry = 0
+        for arg in args:
+            if len(str(arg)) >= pwr:
+                # modulus sets the current decimal as the most significant 
+                # decimal
+                # floor div selects the most significant decimal
+                result_no_carry += arg % 10**pwr // 10**(pwr - 1)
+                
+        # list comprehension way
+        # result_no_carry = sum([arg % 10**pwr // 10**(pwr - 1) for arg in args if len(str(arg)) >= pwr])
+        
+        # final_sum = str(result_no_carry % 10) + final_sum
+        final_sum += result_no_carry % 10
+        
+    return int(final_sum)
