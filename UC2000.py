@@ -789,7 +789,7 @@ class Message():
                 # with data, the checksum is the addition without carry of the 
                 # command and data byte and then one's complimented
                 checksum_byte = (
-                    ~Message.add_no_carry(SET_PERCENT_BYTE, self.data) & 0xff
+                    ~self.add_no_carry(SET_PERCENT_BYTE, self.data) & 0xff
                     )
                 message.append(checksum_byte)
 
