@@ -27,10 +27,10 @@ UC2000_DEFAULT_SETTINGS = {
 
 class UC2000Controller:
     """
-    An interface to SYNRAD 48 series CO2 lasers through UC-2000 controller.
+    An interface to SYNRAD 48 series CO2 lasers through UC-2000 controller.  
 
-    Communication to the UC-2000 controller from a host using REMOTE
-    settings are facilitated through the Serial RS-232 protocol and port.
+    Communication to the UC-2000 controller from a host using REMOTE  
+    settings are facilitated through the Serial RS-232 protocol and port.  
 
     Parameters
     ----------
