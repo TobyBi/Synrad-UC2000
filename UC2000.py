@@ -32,102 +32,102 @@ class UC2000Controller:
     Communication to the UC-2000 controller from a host using REMOTE  
     settings are facilitated through the Serial RS-232 protocol and port.  
 
-    Parameters
-    ----------
-    model : {25, 50}
-        SYNRAD 48 series laser model number, indicates the maximum
-        optical power output
-    open_labjack : LabJack object
-        A LabJack object to transmit messages to the UC-2000, 
-        by default False.
+    Parameters  
+    ----------  
+    model : {25, 50}  
+        SYNRAD 48 series laser model number, indicates the maximum  
+        optical power output  
+    open_labjack : LabJack object  
+        A LabJack object to transmit messages to the UC-2000,  
+        by default False.  
 
-    Attributes
-    ----------
-    lase
-    percent
-    pwm_freq
-    gate_logic
-    max_pwm
-    lase_on_power_up
-    mode
-    checksum
-    max_power
-    power
-    model
-    open_labjack
-    PARAMETER_NAME_hist : list
-        Entire history of previous PARAMETER_NAME from instantiation.
+    Attributes  
+    ----------  
+    lase  
+    percent  
+    pwm_freq  
+    gate_logic  
+    max_pwm  
+    lase_on_power_up  
+    mode  
+    checksum  
+    max_power  
+    power  
+    model  
+    open_labjack  
+    PARAMETER_NAME_hist : list  
+        Entire history of previous PARAMETER_NAME from instantiation.  
 
-    Methods
-    -------
-    reset()
-        Reset all UC-2000 to default.
-    shoot(shot_percent, shot_time, num_shots)
-        Fires a number of shots of a given optical power percent for a 
-        given time.
+    Methods  
+    -------  
+    reset()  
+        Reset all UC-2000 to default.  
+    shoot(shot_percent, shot_time, num_shots)  
+        Fires a number of shots of a given optical power percent for a   
+        given time.  
 
-    Notes
-    -----
-    Pins 2, 3, and 5 of a serial port are used for receive, transmit, and 
-    ground respectively.
-    The host serial port configuration must be
-        Baud rate       9600
-        Data bits       8 bits
-        Parity          None
-        Stop bits       1 bit
-        Flow control    None
+    Notes  
+    -----  
+    Pins 2, 3, and 5 of a serial port are used for receive, transmit, and   
+    ground respectively.  
+    The host serial port configuration must be  
+        Baud rate       9600  
+        Data bits       8 bits  
+        Parity          None  
+        Stop bits       1 bit  
+        Flow control    None  
 
-    For further details please refer to:
-    https://synrad.com/en/products/accessories/uc-2000
+    For further details please refer to:  
+    https://synrad.com/en/products/accessories/uc-2000  
 
-    Messages are sent to the UC-2000 from the host via a DAQ, in this case
-    a LabJack T4/T7 is used. However, any source that can produce RS-232 
-    asynchronous communication can be used. If a Labjack object or no other
-    DAQ is provided then the UC-2000 only stores messages.
+    Messages are sent to the UC-2000 from the host via a DAQ, in this case  
+    a LabJack T4/T7 is used. However, any source that can produce RS-232   
+    asynchronous communication can be used. If a Labjack object or no other  
+    DAQ is provided then the UC-2000 only stores messages.  
 
-    TODO: LUA scripting - call script to improve timings
-    TODO: gate pull-up/down, SYNRAD doesn't know whether gate or comamnd signal activate lasing is faster. Trial and error?
+    TODO: LUA scripting - call script to improve timings  
+    TODO: gate pull-up/down, SYNRAD doesn't know whether gate or comamnd signal activate lasing is faster. Trial and error?  
 
-    TODO: receiving communication from the labjack... or using the UC2000 response
-        if check_ack:
-            daq_response = daq_stats["response"]
+    TODO: receiving communication from the labjack... or using the UC2000 response  
+        if check_ack:  
+            daq_response = daq_stats["response"]  
 
-            if not isinstance(daq_response, list):
-                daq_response = [daq_response]
+            if not isinstance(daq_response, list):  
+                daq_response = [daq_response]  
 
-            if UC2000_RESPONSE["ack"] in daq_response:
-                self.laser_controller.set_any(setting, option)
-                gui_message = "\"{0}\" has changed to \"{1}\"".format(setting, option)
-                action = "continue"
-                outcome = option
-            elif UC2000_RESPONSE["nak"] in daq_response:
-                gui_message = "\"{0}\" remains unchanged as {1} because UC2000 didn't accept the message".format(setting, prev)
-                action = "previous"
-                outcome = prev
+            if UC2000_RESPONSE["ack"] in daq_response:  
+                self.laser_controller.set_any(setting, option)  
+                gui_message = "\"{0}\" has changed to \"{1}\"".format(setting, option)  
+                action = "continue"  
+                outcome = option  
+            elif UC2000_RESPONSE["nak"] in daq_response:  
+                gui_message = "\"{0}\" remains unchanged as {1} because UC2000 didn't accept the message".format(setting, prev)  
+                action = "previous"  
+                outcome = prev  
             else:
-                gui_message = "Setting \"{0}\" remains unchanged as {1} because there has been no response from UC2000".format(setting, prev)
-                action = "previous"
-                outcome = prev
-        else:
-            self.laser_controller.set_any(setting, option)
-            gui_message = "Setting \"{0}\" has changed to \"{1}\"".format(setting, option)
-            action = "continue"
-            outcome = option
+                gui_message = "Setting \"{0}\" remains unchanged as {1} because there has been no response from UC2000".format(setting, prev)  
+                action = "previous"  
+                outcome = prev  
+        else:  
+            self.laser_controller.set_any(setting, option)  
+            gui_message = "Setting \"{0}\" has changed to \"{1}\"".format(setting, option)  
+            action = "continue"  
+            outcome = option  
 
-    TODO: test with slightly longer wait time between asynch communications
-    TODO: can send remote status byte inbetween start and end transmission byte of any other
-    command - maybe use to check option on laser
+    TODO: test with slightly longer wait time between asynch communications  
+    TODO: can send remote status byte inbetween start and end transmission byte of any other  
+    command - maybe use to check option on laser  
 
-    Examples
-    --------
-    >>> laser = UC2000Controller(model=25)
-    >>> with laser:
-    ...     laser.percent = 20
-    ...     laser.lase = True
-    ...     laser.percent = 0
-    ...     laser.lase = False
+    Examples  
+    --------  
+    >>> laser = UC2000Controller(model=25)  
+    >>> with laser:  
+    ...     laser.percent = 20  
+    ...     laser.lase = True  
+    ...     laser.percent = 0  
+    ...     laser.lase = False  
 
-    Demonstration of the .percent and .lase commands
+    Demonstration of the .percent and .lase commands  
     """
     def __init__(self, model: int, open_labjack=False):
         """Inits a UC2000 object."""
