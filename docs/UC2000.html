@@ -274,25 +274,25 @@ UC2000                </h1>
     <span class="nd">@lase</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">lase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set lase state to either True or False.</span>
+<span class="sd">        Set lase state to either True or False.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        state : bool</span>
-<span class="sd">            New set lase state.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        state : bool  </span>
+<span class="sd">            New set lase state.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Lase state is controlled by a Command signal for LOW (0 - 0.5V DC) </span>
-<span class="sd">        and HIGH (3.5 - 5V DC).</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Lase state is controlled by a Command signal for LOW (0 - 0.5V DC)   </span>
+<span class="sd">        and HIGH (3.5 - 5V DC).  </span>
 
-<span class="sd">        When the Command signal is low for &gt;200us, the UC-2000 always supplies </span>
-<span class="sd">        laser with 5kHz, 1us tickle pulse that pre-ionises the laser gas to </span>
-<span class="sd">        just below lasing threshold. Any increase in pulse width causes </span>
-<span class="sd">        emission as enough energy is added to the plasma.</span>
+<span class="sd">        When the Command signal is low for &gt;200us, the UC-2000 always supplies   </span>
+<span class="sd">        laser with 5kHz, 1us tickle pulse that pre-ionises the laser gas to   </span>
+<span class="sd">        just below lasing threshold. Any increase in pulse width causes   </span>
+<span class="sd">        emission as enough energy is added to the plasma.  </span>
 
-<span class="sd">        If a labjack is connected, then a LASE message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a LASE message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lase</span> <span class="o">=</span> <span class="n">state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lase_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
@@ -310,26 +310,26 @@ UC2000                </h1>
     <span class="nd">@percent</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">percent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">per</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set laser percent (PWM signal duty cycle percentage), limited to </span>
-<span class="sd">        between 0 and 95/99% in steps of 0.5%.</span>
+<span class="sd">        Set laser percent (PWM signal duty cycle percentage), limited to   </span>
+<span class="sd">        between 0 and 95/99% in steps of 0.5%.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        per : float</span>
-<span class="sd">            New PWM duty cycle percentage, in seteps of 0.5%</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        per : float  </span>
+<span class="sd">            New PWM duty cycle percentage, in seteps of 0.5%  </span>
 <span class="sd">        </span>
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        The laser percent defaults to previous percent if new percent is </span>
-<span class="sd">        outside of the permitted range. If self.checksum flag is True, then the</span>
-<span class="sd">        set laser percent cannot be 63% defaults to 62.5% instead.</span>
+<span class="sd">        The laser percent defaults to previous percent if new percent is   </span>
+<span class="sd">        outside of the permitted range. If self.checksum flag is True, then the  </span>
+<span class="sd">        set laser percent cannot be 63% defaults to 62.5% instead.  </span>
 
-<span class="sd">        The PWM signal duty cycle controls how much of the Command signal&#39;s </span>
-<span class="sd">        pulse is HIGH. When the Command signal is HIGH, the laser RF amplifiers </span>
-<span class="sd">        are HIGH and this increases the optical output power.</span>
+<span class="sd">        The PWM signal duty cycle controls how much of the Command signal&#39;s   </span>
+<span class="sd">        pulse is HIGH. When the Command signal is HIGH, the laser RF amplifiers   </span>
+<span class="sd">        are HIGH and this increases the optical output power.  </span>
 
-<span class="sd">        If a labjack is connected, then a SET message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SET message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">per</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pwm_percent_limits</span><span class="p">(</span><span class="n">per</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_percent</span> <span class="o">=</span> <span class="n">per</span>
@@ -347,22 +347,22 @@ UC2000                </h1>
     <span class="nd">@pwm_freq</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">pwm_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set laser PWM frequency to either 5, 10, or 20kHz.</span>
+<span class="sd">        Set laser PWM frequency to either 5, 10, or 20kHz.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        freq : {5, 10, 20}</span>
-<span class="sd">            New laser percent.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        freq : {5, 10, 20}  </span>
+<span class="sd">            New laser percent.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        The PWM frequency of the Command signal, where the laser optical output </span>
-<span class="sd">        follows the Command signal with a rise/fall time of 75-150us. A higher </span>
-<span class="sd">        PWM frequency means the laser output response has less ripple and at </span>
-<span class="sd">        20kHz the laser output is nearly CW with small ripple.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        The PWM frequency of the Command signal, where the laser optical output   </span>
+<span class="sd">        follows the Command signal with a rise/fall time of 75-150us. A higher   </span>
+<span class="sd">        PWM frequency means the laser output response has less ripple and at   </span>
+<span class="sd">        20kHz the laser output is nearly CW with small ripple.  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pwm_freq</span> <span class="o">=</span> <span class="n">freq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pwm_freq_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
@@ -379,33 +379,33 @@ UC2000                </h1>
     <span class="nd">@gate_logic</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">gate_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pull</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set gate pull up/down status to either pull &quot;up&quot; or &quot;down&quot;.</span>
+<span class="sd">        Set gate pull up/down status to either pull &quot;up&quot; or &quot;down&quot;.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pull : {&quot;up&quot;, &quot;down&quot;}</span>
-<span class="sd">            New gate pull status.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        pull : {&quot;up&quot;, &quot;down&quot;}  </span>
+<span class="sd">            New gate pull status.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Gate pull up indicates that the laser will fire without a gate signal.</span>
-<span class="sd">        This means the UC-2000 connects an internal resistor between the gate</span>
-<span class="sd">        and command signal.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Gate pull up indicates that the laser will fire without a gate signal.  </span>
+<span class="sd">        This means the UC-2000 connects an internal resistor between the gate  </span>
+<span class="sd">        and command signal.  </span>
 
-<span class="sd">        Gate pull down means the laser will fire when the gate signal is HIGH </span>
-<span class="sd">        and the command signal is HIGH. A gate signal is supplied to the Gate </span>
-<span class="sd">        BNC input and is either logic LOW (0 - 0.9V DC) or HIGH (2.8 - 5 V DC). </span>
-<span class="sd">        Now, the tickle pulse and command signals are determined by the </span>
-<span class="sd">        Gating amplitude.</span>
+<span class="sd">        Gate pull down means the laser will fire when the gate signal is HIGH   </span>
+<span class="sd">        and the command signal is HIGH. A gate signal is supplied to the Gate   </span>
+<span class="sd">        BNC input and is either logic LOW (0 - 0.9V DC) or HIGH (2.8 - 5 V DC).   </span>
+<span class="sd">        Now, the tickle pulse and command signals are determined by the   </span>
+<span class="sd">        Gating amplitude.  </span>
 
-<span class="sd">        Note: PWM and gate pulses are not asynchronous, the edges of both </span>
-<span class="sd">        pulses are not synchronised.</span>
+<span class="sd">        Note: PWM and gate pulses are not asynchronous, the edges of both   </span>
+<span class="sd">        pulses are not synchronised.  </span>
 
-<span class="sd">        Input impedence: 50 kOhms</span>
-<span class="sd">        Gate On Time, min: 3.5us (10ms in closed loop mode)/</span>
+<span class="sd">        Input impedence: 50 kOhms  </span>
+<span class="sd">        Gate On Time, min: 3.5us (10ms in closed loop mode)/  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_logic</span> <span class="o">=</span> <span class="n">pull</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_logic_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pull</span><span class="p">)</span>
@@ -422,21 +422,21 @@ UC2000                </h1>
     <span class="nd">@max_pwm</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">max_pwm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">per</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the maximum PWM percentage of the Command signal.</span>
+<span class="sd">        Set the maximum PWM percentage of the Command signal.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        per : {95, 99}</span>
-<span class="sd">            New max PWM percentage.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        per : {95, 99}  </span>
+<span class="sd">            New max PWM percentage.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        SYNRAD lasers have max PWM percentage of 95% by default to increase</span>
-<span class="sd">        longevity of lasers as greater than 95% increases heat load and &quot;may</span>
-<span class="sd">        cause thermal instability and optical degradation.&quot;</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Synrad lasers have max PWM percentage of 95% by default to increase  </span>
+<span class="sd">        longevity of lasers as greater than 95% increases heat load and &quot;may  </span>
+<span class="sd">        cause thermal instability and optical degradation.&quot;  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_pwm</span> <span class="o">=</span> <span class="n">per</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_pwm_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">per</span><span class="p">)</span>
@@ -453,21 +453,21 @@ UC2000                </h1>
     <span class="nd">@lase_on_power_up</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">lase_on_power_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pwr</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set lase on power-up status to either True or False.</span>
+<span class="sd">        Set lase on power-up status to either True or False.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pwr : bool</span>
-<span class="sd">            New lase on power-up setting.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        pwr : bool  </span>
+<span class="sd">            New lase on power-up setting.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        If the lase on power-up status is ON, then the UC-2000 controller will</span>
-<span class="sd">        send a lase signal immediately when the power is turned on. Used only</span>
-<span class="sd">        when access to UC-2000 controller is limited.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        If the lase on power-up status is ON, then the UC-2000 controller will  </span>
+<span class="sd">        send a lase signal immediately when the power is turned on. Used only  </span>
+<span class="sd">        when access to UC-2000 controller is limited.  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lase_on_power_up</span> <span class="o">=</span> <span class="n">pwr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lase_on_power_up_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pwr</span><span class="p">)</span>
@@ -484,38 +484,38 @@ UC2000                </h1>
     <span class="nd">@mode</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set UC-2000 operating mode to 5 possible choices.</span>
+<span class="sd">        Set UC-2000 operating mode to 5 possible choices.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode_type : {&quot;manual&quot;, &quot;anc&quot;, &quot;anv&quot; &quot;man_closed&quot;, &quot;anv_closed&quot;}</span>
-<span class="sd">            New operating mode.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        mode_type : {&quot;manual&quot;, &quot;anc&quot;, &quot;anv&quot; &quot;man_closed&quot;, &quot;anv_closed&quot;}  </span>
+<span class="sd">            New operating mode.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        MANUAL (&quot;manual&quot;)</span>
-<span class="sd">        Laser output power is adjusted by the PWM command signal duty cycle</span>
-<span class="sd">        percentage.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        MANUAL (&quot;manual&quot;)  </span>
+<span class="sd">        Laser output power is adjusted by the PWM command signal duty cycle  </span>
+<span class="sd">        percentage.  </span>
 
-<span class="sd">        ANC (&quot;anc&quot;)</span>
-<span class="sd">        Laser power controlled by external 4-20mA current loop. PWM duty cycle</span>
-<span class="sd">        changes proportionally to applied current.</span>
+<span class="sd">        ANC (&quot;anc&quot;)  </span>
+<span class="sd">        Laser power controlled by external 4-20mA current loop. PWM duty cycle  </span>
+<span class="sd">        changes proportionally to applied current.  </span>
 
-<span class="sd">        ANV (&quot;anv&quot;)</span>
-<span class="sd">        Laser power controlled by external analog 0-10V source where the duty </span>
-<span class="sd">        cycle is proportional to external voltage.</span>
+<span class="sd">        ANV (&quot;anv&quot;)  </span>
+<span class="sd">        Laser power controlled by external analog 0-10V source where the duty   </span>
+<span class="sd">        cycle is proportional to external voltage.  </span>
 
-<span class="sd">        MAN. CLOSED (&quot;man_closed&quot;)</span>
-<span class="sd">        Closed loop power is ensured by Closed Loop Stablization Kit which</span>
-<span class="sd">        regulates power stability to within +/-2% of the setpoint. Closed loop</span>
-<span class="sd">        settling time is typically 2ms after setpoint change. The recommended</span>
-<span class="sd">        lower and upper control range is 20-80% PWM duty cycle percent.</span>
+<span class="sd">        MAN. CLOSED (&quot;man_closed&quot;)  </span>
+<span class="sd">        Closed loop power is ensured by Closed Loop Stablization Kit which  </span>
+<span class="sd">        regulates power stability to within +/-2% of the setpoint. Closed loop  </span>
+<span class="sd">        settling time is typically 2ms after setpoint change. The recommended  </span>
+<span class="sd">        lower and upper control range is 20-80% PWM duty cycle percent.  </span>
 
-<span class="sd">        ANV CLOSED (&quot;anv_closed&quot;)</span>
-<span class="sd">        Similar to MAN. CLOSED except an external analog voltage is stabilised.</span>
+<span class="sd">        ANV CLOSED (&quot;anv_closed&quot;)  </span>
+<span class="sd">        Similar to MAN. CLOSED except an external analog voltage is stabilised.  </span>
 
-<span class="sd">        If a labjack is connected, then a MODE message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a MODE message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mode_type</span><span class="p">)</span>
@@ -532,22 +532,22 @@ UC2000                </h1>
     <span class="nd">@checksum</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set checksum protocol used for commands sent through the RS-232 protocol.</span>
+<span class="sd">        Set checksum protocol used for commands sent through the RS-232 protocol.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        check : bool</span>
-<span class="sd">            New checksum enable or disable option.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        check : bool  </span>
+<span class="sd">            New checksum enable or disable option.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Only changes the message sent by Python and not the message sent by the</span>
-<span class="sd">        UC-2000. That setting must be physcially changed on the controller.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Only changes the message sent by Python and not the message sent by the  </span>
+<span class="sd">        UC-2000. That setting must be physcially changed on the controller.  </span>
 
-<span class="sd">        Enabled checksum means messages are sent with a final checksum byte</span>
-<span class="sd">        used to better handle errors with serial communication. Details on the</span>
-<span class="sd">        checksum byte and other message formats can be found in the </span>
-<span class="sd">        &quot;Message.py&quot; class.</span>
+<span class="sd">        Enabled checksum means messages are sent with a final checksum byte  </span>
+<span class="sd">        used to better handle errors with serial communication. Details on the  </span>
+<span class="sd">        checksum byte and other message formats can be found in the   </span>
+<span class="sd">        &quot;Message.py&quot; class.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_checksum</span> <span class="o">=</span> <span class="n">check</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checksum_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">check</span><span class="p">)</span>
@@ -577,20 +577,20 @@ UC2000                </h1>
 
     <span class="k">def</span> <span class="nf">_pwm_percent_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit_per</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Limits input PWM percent to (0, 95/99) and converting &#39;63%&#39; to &#39;62.5%&#39;.</span>
+<span class="sd">        Limits input PWM percent to (0, 95/99) and converting &#39;63%&#39; to &#39;62.5%&#39;.  </span>
 
-<span class="sd">        If input is larger than current max PWM setting then reset to</span>
-<span class="sd">        previous PWM percent.</span>
+<span class="sd">        If input is larger than current max PWM setting then reset to  </span>
+<span class="sd">        previous PWM percent.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        limit_per : float</span>
-<span class="sd">            Input percent.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        limit_per : float  </span>
+<span class="sd">            Input percent.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        setpoint : float</span>
-<span class="sd">            Actual valid setpoint.</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        setpoint : float  </span>
+<span class="sd">            Actual valid setpoint.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check if the input percent is an int or float</span>
         <span class="k">try</span><span class="p">:</span>
@@ -621,30 +621,30 @@ UC2000                </h1>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_shot_time_limits</span><span class="p">(</span><span class="n">shot</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Limits input shot time to between 50ms to 10s.</span>
+<span class="sd">        Limits input shot time to between 50ms to 10s.  </span>
 
-<span class="sd">        If oustide the permitted range then the shot time is 50ms.</span>
+<span class="sd">        If oustide the permitted range then the shot time is 50ms.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shot : float</span>
-<span class="sd">            Input shot time in ms.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        shot : float  </span>
+<span class="sd">            Input shot time in ms.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            Valid shot time in ms.</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        float  </span>
+<span class="sd">            Valid shot time in ms.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Shot time is the time between the laser ON and OFF state, which can be</span>
-<span class="sd">        either:</span>
-<span class="sd">            - Turning the command signal between ON and OFF</span>
-<span class="sd">            - Setting the PWM command signal percent to the minimum lase value</span>
-<span class="sd">            - Switching the Gate signal between HIGH and LOW</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Shot time is the time between the laser ON and OFF state, which can be  </span>
+<span class="sd">        either:  </span>
+<span class="sd">            - Turning the command signal between ON and OFF  </span>
+<span class="sd">            - Setting the PWM command signal percent to the minimum lase value  </span>
+<span class="sd">            - Switching the Gate signal between HIGH and LOW  </span>
 
-<span class="sd">        Currently limited by communication speed between Python script and</span>
-<span class="sd">        UC-2000 controller.</span>
+<span class="sd">        Currently limited by communication speed between Python script and  </span>
+<span class="sd">        UC-2000 controller.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">shot</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">shot</span><span class="p">)</span>
@@ -661,42 +661,42 @@ UC2000                </h1>
 
     <span class="k">def</span> <span class="nf">shoot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shot_percent</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">shot_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">num_shots</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.</span>
+<span class="sd">        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.  </span>
 <span class="sd">        </span>
-<span class="sd">        Currently, the low laser percent is 3% as this doesn&#39;t affect the </span>
-<span class="sd">        silica glass rods we are using, however, the option can be set in the </span>
-<span class="sd">        script above.</span>
+<span class="sd">        Currently, the low laser percent is 3% as this doesn&#39;t affect the   </span>
+<span class="sd">        silica glass rods we are using, however, the option can be set in the   </span>
+<span class="sd">        script above.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shot_percent : float</span>
-<span class="sd">            PWM laser percent.</span>
-<span class="sd">        shot_time : float</span>
-<span class="sd">            Time of shot in ms.</span>
-<span class="sd">        num_shots : int</span>
-<span class="sd">            Number of consecutive shots</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        shot_percent : float  </span>
+<span class="sd">            PWM laser percent.  </span>
+<span class="sd">        shot_time : float  </span>
+<span class="sd">            Time of shot in ms.  </span>
+<span class="sd">        num_shots : int  </span>
+<span class="sd">            Number of consecutive shots  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            Dict containing average interval time, total time, and any response </span>
-<span class="sd">            from UC-2000</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        dict  </span>
+<span class="sd">            Dict containing average interval time, total time, and any response   </span>
+<span class="sd">            from UC-2000  </span>
 <span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Shot time can be guaranteed but time between shots might be less</span>
-<span class="sd">        accurate.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Shot time can be guaranteed but time between shots might be less  </span>
+<span class="sd">        accurate.  </span>
 
-<span class="sd">        If shooting more than once, the time between shots is the same time as </span>
-<span class="sd">        the shot time.</span>
+<span class="sd">        If shooting more than once, the time between shots is the same time as   </span>
+<span class="sd">        the shot time.  </span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; laser = UC2000Controller(model=25)</span>
-<span class="sd">        &gt;&gt;&gt; with laser:</span>
-<span class="sd">        ...     laser.shoot(10, 500, 2)</span>
+<span class="sd">        Examples  </span>
+<span class="sd">        --------  </span>
+<span class="sd">        &gt;&gt;&gt; laser = UC2000Controller(model=25)  </span>
+<span class="sd">        &gt;&gt;&gt; with laser:  </span>
+<span class="sd">        ...     laser.shoot(10, 500, 2)  </span>
 
-<span class="sd">        Fires 2 shots for 500ms at 10% PWM duty cycle percent.</span>
+<span class="sd">        Fires 2 shots for 500ms at 10% PWM duty cycle percent.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">shot_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shot_time_limits</span><span class="p">(</span><span class="n">shot_time</span><span class="p">)</span>
         <span class="c1"># Convert shot_time to microseconds</span>
@@ -776,77 +776,77 @@ UC2000                </h1>
 
 <span class="k">class</span> <span class="nc">Message</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial </span>
-<span class="sd">    port.</span>
+<span class="sd">    REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial   </span>
+<span class="sd">    port.  </span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    command : {&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;,</span>
-<span class="sd">                &quot;mode&quot;, &quot;lase&quot;, &quot;percent&quot;, &quot;status_request&quot;}</span>
-<span class="sd">        Command byte.</span>
-<span class="sd">    data : float</span>
-<span class="sd">        Data for PWM (or SET for closed loop) command.</span>
-<span class="sd">    checksum : bool</span>
-<span class="sd">        Checksum protocol mode.</span>
+<span class="sd">    Parameters  </span>
+<span class="sd">    ----------  </span>
+<span class="sd">    command : {&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;,  </span>
+<span class="sd">                &quot;mode&quot;, &quot;lase&quot;, &quot;percent&quot;, &quot;status_request&quot;}  </span>
+<span class="sd">        Command byte.  </span>
+<span class="sd">    data : float  </span>
+<span class="sd">        Data for PWM (or SET for closed loop) command.  </span>
+<span class="sd">    checksum : bool  </span>
+<span class="sd">        Checksum protocol mode.  </span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    command</span>
-<span class="sd">    data</span>
-<span class="sd">    checksum</span>
-<span class="sd">    message_bytes</span>
+<span class="sd">    Attributes  </span>
+<span class="sd">    ----------  </span>
+<span class="sd">    command  </span>
+<span class="sd">    data  </span>
+<span class="sd">    checksum  </span>
+<span class="sd">    message_bytes  </span>
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    add_no_carry(*args)</span>
+<span class="sd">    Methods  </span>
+<span class="sd">    -------  </span>
+<span class="sd">    add_no_carry(*args)  </span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    There are 5 types of messages with different formats sent;</span>
-<span class="sd">        Setup (&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;)</span>
-<span class="sd">        Mode (&quot;mode&quot;)</span>
-<span class="sd">        PWM (or closed loop SET) (&quot;percent&quot;)</span>
-<span class="sd">        Lase (&quot;lase&quot;)</span>
-<span class="sd">        Status Request</span>
+<span class="sd">    Notes  </span>
+<span class="sd">    -----  </span>
+<span class="sd">    There are 5 types of messages with different formats sent;  </span>
+<span class="sd">        Setup (&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;)  </span>
+<span class="sd">        Mode (&quot;mode&quot;)  </span>
+<span class="sd">        PWM (or closed loop SET) (&quot;percent&quot;)  </span>
+<span class="sd">        Lase (&quot;lase&quot;)  </span>
+<span class="sd">        Status Request  </span>
 
-<span class="sd">    Setup Mode, and Lase commands have the byte sequence:</span>
-<span class="sd">        STX&lt;Command&gt;&lt;Checksum&gt;</span>
-<span class="sd">        STX - start transmission byte.</span>
-<span class="sd">        The checksum byte is the one&#39;s compliment of the Command byte.</span>
+<span class="sd">    Setup Mode, and Lase commands have the byte sequence:  </span>
+<span class="sd">        STX&lt;Command&gt;&lt;Checksum&gt;  </span>
+<span class="sd">        STX - start transmission byte.  </span>
+<span class="sd">        The checksum byte is the one&#39;s compliment of the Command byte.  </span>
 
-<span class="sd">    PWM (or SET) command byte sequence:</span>
-<span class="sd">        STX&lt;Command&gt;&lt;Data Byte&gt;&lt;Checksum&gt;</span>
-<span class="sd">        Data byte is the PWM percentage multipled by 2, converted into hex.</span>
-<span class="sd">        The checksum byte is the adding without carry between command and</span>
-<span class="sd">        data byte and then performing the one&#39;s compliment.</span>
+<span class="sd">    PWM (or SET) command byte sequence:  </span>
+<span class="sd">        STX&lt;Command&gt;&lt;Data Byte&gt;&lt;Checksum&gt;  </span>
+<span class="sd">        Data byte is the PWM percentage multipled by 2, converted into hex.  </span>
+<span class="sd">        The checksum byte is the adding without carry between command and  </span>
+<span class="sd">        data byte and then performing the one&#39;s compliment.  </span>
 
-<span class="sd">    Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK</span>
-<span class="sd">    (0x3F). A NAK is sent if there is no valid command or checksum byte</span>
-<span class="sd">    sent within 1s of STX byte or if the checksum byte is wrong.</span>
+<span class="sd">    Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK  </span>
+<span class="sd">    (0x3F). A NAK is sent if there is no valid command or checksum byte  </span>
+<span class="sd">    sent within 1s of STX byte or if the checksum byte is wrong.  </span>
 
-<span class="sd">    Status Request:</span>
-<span class="sd">        Single byte to tell UC-2000 to report it&#39;s status.</span>
+<span class="sd">    Status Request:  </span>
+<span class="sd">        Single byte to tell UC-2000 to report it&#39;s status.  </span>
 <span class="sd">    </span>
-<span class="sd">    Response from Status Request is</span>
-<span class="sd">        ACK&lt;Status Byte1&gt;&lt;Status Byte2&gt;&lt;PWM Byte&gt;&lt;Power Byte&gt;&lt;Checksum&gt;</span>
-<span class="sd">        Refer to the UC-2000 manual for futher details about the contents</span>
-<span class="sd">        of the response bytes. Currently not using so not as important.</span>
+<span class="sd">    Response from Status Request is  </span>
+<span class="sd">        ACK&lt;Status Byte1&gt;&lt;Status Byte2&gt;&lt;PWM Byte&gt;&lt;Power Byte&gt;&lt;Checksum&gt;  </span>
+<span class="sd">        Refer to the UC-2000 manual for futher details about the contents  </span>
+<span class="sd">        of the response bytes. Currently not using so not as important.  </span>
 
-<span class="sd">    TODO: include parsing response byte from UC-2000</span>
+<span class="sd">    TODO: include parsing response byte from UC-2000  </span>
 
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; message = Message(&quot;percent&quot;, 10, False)</span>
-<span class="sd">    &gt;&gt;&gt; message.message_bytes()</span>
-<span class="sd">    [126, 127, 20]</span>
+<span class="sd">    Examples  </span>
+<span class="sd">    --------  </span>
+<span class="sd">    &gt;&gt;&gt; message = Message(&quot;percent&quot;, 10, False)  </span>
+<span class="sd">    &gt;&gt;&gt; message.message_bytes()  </span>
+<span class="sd">    [126, 127, 20]  </span>
 
-<span class="sd">    Create message for setting PWM percent to 10%.</span>
+<span class="sd">    Create message for setting PWM percent to 10%.  </span>
 
-<span class="sd">    &gt;&gt;&gt; message = Message(&quot;lase&quot;, True, False)</span>
-<span class="sd">    &gt;&gt;&gt; message.message_bytes()</span>
-<span class="sd">    [126, 127, 117]</span>
+<span class="sd">    &gt;&gt;&gt; message = Message(&quot;lase&quot;, True, False)  </span>
+<span class="sd">    &gt;&gt;&gt; message.message_bytes()  </span>
+<span class="sd">    [126, 127, 117]  </span>
 
-<span class="sd">    Create message for turning on command signal.</span>
+<span class="sd">    Create message for turning on command signal.  </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">checksum</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Inits a Message object.&quot;&quot;&quot;</span>
@@ -857,13 +857,13 @@ UC2000                </h1>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creates and returns REMOTE message byte sequence.</span>
+<span class="sd">        Creates and returns REMOTE message byte sequence.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        message : list of int</span>
-<span class="sd">            The message sequence containing the start byte, command byte, </span>
-<span class="sd">            [data byte (optional)], and checksum (optional)</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        message : list of int  </span>
+<span class="sd">            The message sequence containing the start byte, command byte,   </span>
+<span class="sd">            [data byte (optional)], and checksum (optional)  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="ow">in</span> <span class="n">UC2000_COMMAND_BYTES</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">command_byte</span> <span class="o">=</span> <span class="n">UC2000_COMMAND_BYTES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
@@ -901,30 +901,30 @@ UC2000                </h1>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">add_no_carry</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Addition without carry; addition is not carried to the next decimal up.</span>
+<span class="sd">        Addition without carry; addition is not carried to the next decimal up.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        *args : iterable (not string)</span>
-<span class="sd">            Iterate of ints to add without carry.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        *args : iterable (not string)  </span>
+<span class="sd">            Iterate of ints to add without carry.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        final_sum : int</span>
-<span class="sd">            the result...</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        final_sum : int  </span>
+<span class="sd">            the result...  </span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 1)</span>
-<span class="sd">        2</span>
+<span class="sd">        Examples  </span>
+<span class="sd">        --------  </span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 1)  </span>
+<span class="sd">        2  </span>
 
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 18)</span>
-<span class="sd">        19</span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 18)  </span>
+<span class="sd">        19  </span>
 
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 19)</span>
-<span class="sd">        10</span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 19)  </span>
+<span class="sd">        10  </span>
 
-<span class="sd">        The &#39;10&#39; is not carried over to the next decimal.</span>
+<span class="sd">        The &#39;10&#39; is not carried over to the next decimal.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_digits</span> <span class="o">=</span> <span class="p">[]</span>
         
@@ -1118,25 +1118,25 @@ UC2000                </h1>
     <span class="nd">@lase</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">lase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set lase state to either True or False.</span>
+<span class="sd">        Set lase state to either True or False.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        state : bool</span>
-<span class="sd">            New set lase state.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        state : bool  </span>
+<span class="sd">            New set lase state.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Lase state is controlled by a Command signal for LOW (0 - 0.5V DC) </span>
-<span class="sd">        and HIGH (3.5 - 5V DC).</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Lase state is controlled by a Command signal for LOW (0 - 0.5V DC)   </span>
+<span class="sd">        and HIGH (3.5 - 5V DC).  </span>
 
-<span class="sd">        When the Command signal is low for &gt;200us, the UC-2000 always supplies </span>
-<span class="sd">        laser with 5kHz, 1us tickle pulse that pre-ionises the laser gas to </span>
-<span class="sd">        just below lasing threshold. Any increase in pulse width causes </span>
-<span class="sd">        emission as enough energy is added to the plasma.</span>
+<span class="sd">        When the Command signal is low for &gt;200us, the UC-2000 always supplies   </span>
+<span class="sd">        laser with 5kHz, 1us tickle pulse that pre-ionises the laser gas to   </span>
+<span class="sd">        just below lasing threshold. Any increase in pulse width causes   </span>
+<span class="sd">        emission as enough energy is added to the plasma.  </span>
 
-<span class="sd">        If a labjack is connected, then a LASE message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a LASE message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lase</span> <span class="o">=</span> <span class="n">state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lase_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
@@ -1154,26 +1154,26 @@ UC2000                </h1>
     <span class="nd">@percent</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">percent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">per</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set laser percent (PWM signal duty cycle percentage), limited to </span>
-<span class="sd">        between 0 and 95/99% in steps of 0.5%.</span>
+<span class="sd">        Set laser percent (PWM signal duty cycle percentage), limited to   </span>
+<span class="sd">        between 0 and 95/99% in steps of 0.5%.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        per : float</span>
-<span class="sd">            New PWM duty cycle percentage, in seteps of 0.5%</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        per : float  </span>
+<span class="sd">            New PWM duty cycle percentage, in seteps of 0.5%  </span>
 <span class="sd">        </span>
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        The laser percent defaults to previous percent if new percent is </span>
-<span class="sd">        outside of the permitted range. If self.checksum flag is True, then the</span>
-<span class="sd">        set laser percent cannot be 63% defaults to 62.5% instead.</span>
+<span class="sd">        The laser percent defaults to previous percent if new percent is   </span>
+<span class="sd">        outside of the permitted range. If self.checksum flag is True, then the  </span>
+<span class="sd">        set laser percent cannot be 63% defaults to 62.5% instead.  </span>
 
-<span class="sd">        The PWM signal duty cycle controls how much of the Command signal&#39;s </span>
-<span class="sd">        pulse is HIGH. When the Command signal is HIGH, the laser RF amplifiers </span>
-<span class="sd">        are HIGH and this increases the optical output power.</span>
+<span class="sd">        The PWM signal duty cycle controls how much of the Command signal&#39;s   </span>
+<span class="sd">        pulse is HIGH. When the Command signal is HIGH, the laser RF amplifiers   </span>
+<span class="sd">        are HIGH and this increases the optical output power.  </span>
 
-<span class="sd">        If a labjack is connected, then a SET message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SET message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">per</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pwm_percent_limits</span><span class="p">(</span><span class="n">per</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_percent</span> <span class="o">=</span> <span class="n">per</span>
@@ -1191,22 +1191,22 @@ UC2000                </h1>
     <span class="nd">@pwm_freq</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">pwm_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set laser PWM frequency to either 5, 10, or 20kHz.</span>
+<span class="sd">        Set laser PWM frequency to either 5, 10, or 20kHz.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        freq : {5, 10, 20}</span>
-<span class="sd">            New laser percent.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        freq : {5, 10, 20}  </span>
+<span class="sd">            New laser percent.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        The PWM frequency of the Command signal, where the laser optical output </span>
-<span class="sd">        follows the Command signal with a rise/fall time of 75-150us. A higher </span>
-<span class="sd">        PWM frequency means the laser output response has less ripple and at </span>
-<span class="sd">        20kHz the laser output is nearly CW with small ripple.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        The PWM frequency of the Command signal, where the laser optical output   </span>
+<span class="sd">        follows the Command signal with a rise/fall time of 75-150us. A higher   </span>
+<span class="sd">        PWM frequency means the laser output response has less ripple and at   </span>
+<span class="sd">        20kHz the laser output is nearly CW with small ripple.  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pwm_freq</span> <span class="o">=</span> <span class="n">freq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pwm_freq_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
@@ -1223,33 +1223,33 @@ UC2000                </h1>
     <span class="nd">@gate_logic</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">gate_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pull</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set gate pull up/down status to either pull &quot;up&quot; or &quot;down&quot;.</span>
+<span class="sd">        Set gate pull up/down status to either pull &quot;up&quot; or &quot;down&quot;.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pull : {&quot;up&quot;, &quot;down&quot;}</span>
-<span class="sd">            New gate pull status.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        pull : {&quot;up&quot;, &quot;down&quot;}  </span>
+<span class="sd">            New gate pull status.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Gate pull up indicates that the laser will fire without a gate signal.</span>
-<span class="sd">        This means the UC-2000 connects an internal resistor between the gate</span>
-<span class="sd">        and command signal.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Gate pull up indicates that the laser will fire without a gate signal.  </span>
+<span class="sd">        This means the UC-2000 connects an internal resistor between the gate  </span>
+<span class="sd">        and command signal.  </span>
 
-<span class="sd">        Gate pull down means the laser will fire when the gate signal is HIGH </span>
-<span class="sd">        and the command signal is HIGH. A gate signal is supplied to the Gate </span>
-<span class="sd">        BNC input and is either logic LOW (0 - 0.9V DC) or HIGH (2.8 - 5 V DC). </span>
-<span class="sd">        Now, the tickle pulse and command signals are determined by the </span>
-<span class="sd">        Gating amplitude.</span>
+<span class="sd">        Gate pull down means the laser will fire when the gate signal is HIGH   </span>
+<span class="sd">        and the command signal is HIGH. A gate signal is supplied to the Gate   </span>
+<span class="sd">        BNC input and is either logic LOW (0 - 0.9V DC) or HIGH (2.8 - 5 V DC).   </span>
+<span class="sd">        Now, the tickle pulse and command signals are determined by the   </span>
+<span class="sd">        Gating amplitude.  </span>
 
-<span class="sd">        Note: PWM and gate pulses are not asynchronous, the edges of both </span>
-<span class="sd">        pulses are not synchronised.</span>
+<span class="sd">        Note: PWM and gate pulses are not asynchronous, the edges of both   </span>
+<span class="sd">        pulses are not synchronised.  </span>
 
-<span class="sd">        Input impedence: 50 kOhms</span>
-<span class="sd">        Gate On Time, min: 3.5us (10ms in closed loop mode)/</span>
+<span class="sd">        Input impedence: 50 kOhms  </span>
+<span class="sd">        Gate On Time, min: 3.5us (10ms in closed loop mode)/  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_logic</span> <span class="o">=</span> <span class="n">pull</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_logic_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pull</span><span class="p">)</span>
@@ -1266,21 +1266,21 @@ UC2000                </h1>
     <span class="nd">@max_pwm</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">max_pwm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">per</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the maximum PWM percentage of the Command signal.</span>
+<span class="sd">        Set the maximum PWM percentage of the Command signal.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        per : {95, 99}</span>
-<span class="sd">            New max PWM percentage.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        per : {95, 99}  </span>
+<span class="sd">            New max PWM percentage.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        SYNRAD lasers have max PWM percentage of 95% by default to increase</span>
-<span class="sd">        longevity of lasers as greater than 95% increases heat load and &quot;may</span>
-<span class="sd">        cause thermal instability and optical degradation.&quot;</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Synrad lasers have max PWM percentage of 95% by default to increase  </span>
+<span class="sd">        longevity of lasers as greater than 95% increases heat load and &quot;may  </span>
+<span class="sd">        cause thermal instability and optical degradation.&quot;  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_pwm</span> <span class="o">=</span> <span class="n">per</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_pwm_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">per</span><span class="p">)</span>
@@ -1297,21 +1297,21 @@ UC2000                </h1>
     <span class="nd">@lase_on_power_up</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">lase_on_power_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pwr</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set lase on power-up status to either True or False.</span>
+<span class="sd">        Set lase on power-up status to either True or False.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pwr : bool</span>
-<span class="sd">            New lase on power-up setting.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        pwr : bool  </span>
+<span class="sd">            New lase on power-up setting.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        If the lase on power-up status is ON, then the UC-2000 controller will</span>
-<span class="sd">        send a lase signal immediately when the power is turned on. Used only</span>
-<span class="sd">        when access to UC-2000 controller is limited.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        If the lase on power-up status is ON, then the UC-2000 controller will  </span>
+<span class="sd">        send a lase signal immediately when the power is turned on. Used only  </span>
+<span class="sd">        when access to UC-2000 controller is limited.  </span>
 
-<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a SETUP message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lase_on_power_up</span> <span class="o">=</span> <span class="n">pwr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lase_on_power_up_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pwr</span><span class="p">)</span>
@@ -1328,38 +1328,38 @@ UC2000                </h1>
     <span class="nd">@mode</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set UC-2000 operating mode to 5 possible choices.</span>
+<span class="sd">        Set UC-2000 operating mode to 5 possible choices.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        mode_type : {&quot;manual&quot;, &quot;anc&quot;, &quot;anv&quot; &quot;man_closed&quot;, &quot;anv_closed&quot;}</span>
-<span class="sd">            New operating mode.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        mode_type : {&quot;manual&quot;, &quot;anc&quot;, &quot;anv&quot; &quot;man_closed&quot;, &quot;anv_closed&quot;}  </span>
+<span class="sd">            New operating mode.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        MANUAL (&quot;manual&quot;)</span>
-<span class="sd">        Laser output power is adjusted by the PWM command signal duty cycle</span>
-<span class="sd">        percentage.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        MANUAL (&quot;manual&quot;)  </span>
+<span class="sd">        Laser output power is adjusted by the PWM command signal duty cycle  </span>
+<span class="sd">        percentage.  </span>
 
-<span class="sd">        ANC (&quot;anc&quot;)</span>
-<span class="sd">        Laser power controlled by external 4-20mA current loop. PWM duty cycle</span>
-<span class="sd">        changes proportionally to applied current.</span>
+<span class="sd">        ANC (&quot;anc&quot;)  </span>
+<span class="sd">        Laser power controlled by external 4-20mA current loop. PWM duty cycle  </span>
+<span class="sd">        changes proportionally to applied current.  </span>
 
-<span class="sd">        ANV (&quot;anv&quot;)</span>
-<span class="sd">        Laser power controlled by external analog 0-10V source where the duty </span>
-<span class="sd">        cycle is proportional to external voltage.</span>
+<span class="sd">        ANV (&quot;anv&quot;)  </span>
+<span class="sd">        Laser power controlled by external analog 0-10V source where the duty   </span>
+<span class="sd">        cycle is proportional to external voltage.  </span>
 
-<span class="sd">        MAN. CLOSED (&quot;man_closed&quot;)</span>
-<span class="sd">        Closed loop power is ensured by Closed Loop Stablization Kit which</span>
-<span class="sd">        regulates power stability to within +/-2% of the setpoint. Closed loop</span>
-<span class="sd">        settling time is typically 2ms after setpoint change. The recommended</span>
-<span class="sd">        lower and upper control range is 20-80% PWM duty cycle percent.</span>
+<span class="sd">        MAN. CLOSED (&quot;man_closed&quot;)  </span>
+<span class="sd">        Closed loop power is ensured by Closed Loop Stablization Kit which  </span>
+<span class="sd">        regulates power stability to within +/-2% of the setpoint. Closed loop  </span>
+<span class="sd">        settling time is typically 2ms after setpoint change. The recommended  </span>
+<span class="sd">        lower and upper control range is 20-80% PWM duty cycle percent.  </span>
 
-<span class="sd">        ANV CLOSED (&quot;anv_closed&quot;)</span>
-<span class="sd">        Similar to MAN. CLOSED except an external analog voltage is stabilised.</span>
+<span class="sd">        ANV CLOSED (&quot;anv_closed&quot;)  </span>
+<span class="sd">        Similar to MAN. CLOSED except an external analog voltage is stabilised.  </span>
 
-<span class="sd">        If a labjack is connected, then a MODE message will be sent to the </span>
-<span class="sd">        UC2000.</span>
+<span class="sd">        If a labjack is connected, then a MODE message will be sent to the   </span>
+<span class="sd">        UC2000.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mode_type</span><span class="p">)</span>
@@ -1376,22 +1376,22 @@ UC2000                </h1>
     <span class="nd">@checksum</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set checksum protocol used for commands sent through the RS-232 protocol.</span>
+<span class="sd">        Set checksum protocol used for commands sent through the RS-232 protocol.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        check : bool</span>
-<span class="sd">            New checksum enable or disable option.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        check : bool  </span>
+<span class="sd">            New checksum enable or disable option.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Only changes the message sent by Python and not the message sent by the</span>
-<span class="sd">        UC-2000. That setting must be physcially changed on the controller.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Only changes the message sent by Python and not the message sent by the  </span>
+<span class="sd">        UC-2000. That setting must be physcially changed on the controller.  </span>
 
-<span class="sd">        Enabled checksum means messages are sent with a final checksum byte</span>
-<span class="sd">        used to better handle errors with serial communication. Details on the</span>
-<span class="sd">        checksum byte and other message formats can be found in the </span>
-<span class="sd">        &quot;Message.py&quot; class.</span>
+<span class="sd">        Enabled checksum means messages are sent with a final checksum byte  </span>
+<span class="sd">        used to better handle errors with serial communication. Details on the  </span>
+<span class="sd">        checksum byte and other message formats can be found in the   </span>
+<span class="sd">        &quot;Message.py&quot; class.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_checksum</span> <span class="o">=</span> <span class="n">check</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checksum_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">check</span><span class="p">)</span>
@@ -1421,20 +1421,20 @@ UC2000                </h1>
 
     <span class="k">def</span> <span class="nf">_pwm_percent_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit_per</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Limits input PWM percent to (0, 95/99) and converting &#39;63%&#39; to &#39;62.5%&#39;.</span>
+<span class="sd">        Limits input PWM percent to (0, 95/99) and converting &#39;63%&#39; to &#39;62.5%&#39;.  </span>
 
-<span class="sd">        If input is larger than current max PWM setting then reset to</span>
-<span class="sd">        previous PWM percent.</span>
+<span class="sd">        If input is larger than current max PWM setting then reset to  </span>
+<span class="sd">        previous PWM percent.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        limit_per : float</span>
-<span class="sd">            Input percent.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        limit_per : float  </span>
+<span class="sd">            Input percent.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        setpoint : float</span>
-<span class="sd">            Actual valid setpoint.</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        setpoint : float  </span>
+<span class="sd">            Actual valid setpoint.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check if the input percent is an int or float</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1465,30 +1465,30 @@ UC2000                </h1>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_shot_time_limits</span><span class="p">(</span><span class="n">shot</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Limits input shot time to between 50ms to 10s.</span>
+<span class="sd">        Limits input shot time to between 50ms to 10s.  </span>
 
-<span class="sd">        If oustide the permitted range then the shot time is 50ms.</span>
+<span class="sd">        If oustide the permitted range then the shot time is 50ms.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shot : float</span>
-<span class="sd">            Input shot time in ms.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        shot : float  </span>
+<span class="sd">            Input shot time in ms.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            Valid shot time in ms.</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        float  </span>
+<span class="sd">            Valid shot time in ms.  </span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Shot time is the time between the laser ON and OFF state, which can be</span>
-<span class="sd">        either:</span>
-<span class="sd">            - Turning the command signal between ON and OFF</span>
-<span class="sd">            - Setting the PWM command signal percent to the minimum lase value</span>
-<span class="sd">            - Switching the Gate signal between HIGH and LOW</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Shot time is the time between the laser ON and OFF state, which can be  </span>
+<span class="sd">        either:  </span>
+<span class="sd">            - Turning the command signal between ON and OFF  </span>
+<span class="sd">            - Setting the PWM command signal percent to the minimum lase value  </span>
+<span class="sd">            - Switching the Gate signal between HIGH and LOW  </span>
 
-<span class="sd">        Currently limited by communication speed between Python script and</span>
-<span class="sd">        UC-2000 controller.</span>
+<span class="sd">        Currently limited by communication speed between Python script and  </span>
+<span class="sd">        UC-2000 controller.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">shot</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">shot</span><span class="p">)</span>
@@ -1505,42 +1505,42 @@ UC2000                </h1>
 
     <span class="k">def</span> <span class="nf">shoot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shot_percent</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">shot_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">num_shots</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.</span>
+<span class="sd">        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.  </span>
 <span class="sd">        </span>
-<span class="sd">        Currently, the low laser percent is 3% as this doesn&#39;t affect the </span>
-<span class="sd">        silica glass rods we are using, however, the option can be set in the </span>
-<span class="sd">        script above.</span>
+<span class="sd">        Currently, the low laser percent is 3% as this doesn&#39;t affect the   </span>
+<span class="sd">        silica glass rods we are using, however, the option can be set in the   </span>
+<span class="sd">        script above.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shot_percent : float</span>
-<span class="sd">            PWM laser percent.</span>
-<span class="sd">        shot_time : float</span>
-<span class="sd">            Time of shot in ms.</span>
-<span class="sd">        num_shots : int</span>
-<span class="sd">            Number of consecutive shots</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        shot_percent : float  </span>
+<span class="sd">            PWM laser percent.  </span>
+<span class="sd">        shot_time : float  </span>
+<span class="sd">            Time of shot in ms.  </span>
+<span class="sd">        num_shots : int  </span>
+<span class="sd">            Number of consecutive shots  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            Dict containing average interval time, total time, and any response </span>
-<span class="sd">            from UC-2000</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        dict  </span>
+<span class="sd">            Dict containing average interval time, total time, and any response   </span>
+<span class="sd">            from UC-2000  </span>
 <span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Shot time can be guaranteed but time between shots might be less</span>
-<span class="sd">        accurate.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Shot time can be guaranteed but time between shots might be less  </span>
+<span class="sd">        accurate.  </span>
 
-<span class="sd">        If shooting more than once, the time between shots is the same time as </span>
-<span class="sd">        the shot time.</span>
+<span class="sd">        If shooting more than once, the time between shots is the same time as   </span>
+<span class="sd">        the shot time.  </span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; laser = UC2000Controller(model=25)</span>
-<span class="sd">        &gt;&gt;&gt; with laser:</span>
-<span class="sd">        ...     laser.shoot(10, 500, 2)</span>
+<span class="sd">        Examples  </span>
+<span class="sd">        --------  </span>
+<span class="sd">        &gt;&gt;&gt; laser = UC2000Controller(model=25)  </span>
+<span class="sd">        &gt;&gt;&gt; with laser:  </span>
+<span class="sd">        ...     laser.shoot(10, 500, 2)  </span>
 
-<span class="sd">        Fires 2 shots for 500ms at 10% PWM duty cycle percent.</span>
+<span class="sd">        Fires 2 shots for 500ms at 10% PWM duty cycle percent.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">shot_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shot_time_limits</span><span class="p">(</span><span class="n">shot_time</span><span class="p">)</span>
         <span class="c1"># Convert shot_time to microseconds</span>
@@ -1864,42 +1864,42 @@ command - maybe use to check option on laser  </p>
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">shoot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shot_percent</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">shot_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">num_shots</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.</span>
+<span class="sd">        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.  </span>
 <span class="sd">        </span>
-<span class="sd">        Currently, the low laser percent is 3% as this doesn&#39;t affect the </span>
-<span class="sd">        silica glass rods we are using, however, the option can be set in the </span>
-<span class="sd">        script above.</span>
+<span class="sd">        Currently, the low laser percent is 3% as this doesn&#39;t affect the   </span>
+<span class="sd">        silica glass rods we are using, however, the option can be set in the   </span>
+<span class="sd">        script above.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shot_percent : float</span>
-<span class="sd">            PWM laser percent.</span>
-<span class="sd">        shot_time : float</span>
-<span class="sd">            Time of shot in ms.</span>
-<span class="sd">        num_shots : int</span>
-<span class="sd">            Number of consecutive shots</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        shot_percent : float  </span>
+<span class="sd">            PWM laser percent.  </span>
+<span class="sd">        shot_time : float  </span>
+<span class="sd">            Time of shot in ms.  </span>
+<span class="sd">        num_shots : int  </span>
+<span class="sd">            Number of consecutive shots  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            Dict containing average interval time, total time, and any response </span>
-<span class="sd">            from UC-2000</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        dict  </span>
+<span class="sd">            Dict containing average interval time, total time, and any response   </span>
+<span class="sd">            from UC-2000  </span>
 <span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Shot time can be guaranteed but time between shots might be less</span>
-<span class="sd">        accurate.</span>
+<span class="sd">        Notes  </span>
+<span class="sd">        -----  </span>
+<span class="sd">        Shot time can be guaranteed but time between shots might be less  </span>
+<span class="sd">        accurate.  </span>
 
-<span class="sd">        If shooting more than once, the time between shots is the same time as </span>
-<span class="sd">        the shot time.</span>
+<span class="sd">        If shooting more than once, the time between shots is the same time as   </span>
+<span class="sd">        the shot time.  </span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; laser = UC2000Controller(model=25)</span>
-<span class="sd">        &gt;&gt;&gt; with laser:</span>
-<span class="sd">        ...     laser.shoot(10, 500, 2)</span>
+<span class="sd">        Examples  </span>
+<span class="sd">        --------  </span>
+<span class="sd">        &gt;&gt;&gt; laser = UC2000Controller(model=25)  </span>
+<span class="sd">        &gt;&gt;&gt; with laser:  </span>
+<span class="sd">        ...     laser.shoot(10, 500, 2)  </span>
 
-<span class="sd">        Fires 2 shots for 500ms at 10% PWM duty cycle percent.</span>
+<span class="sd">        Fires 2 shots for 500ms at 10% PWM duty cycle percent.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">shot_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shot_time_limits</span><span class="p">(</span><span class="n">shot_time</span><span class="p">)</span>
         <span class="c1"># Convert shot_time to microseconds</span>
@@ -1940,39 +1940,39 @@ command - maybe use to check option on laser  </p>
 
             </details>
 
-                    <div class="docstring"><p>Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.</p>
+                    <div class="docstring"><p>Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.  </p>
 
-<p>Currently, the low laser percent is 3% as this doesn't affect the 
-silica glass rods we are using, however, the option can be set in the 
-script above.</p>
+<p>Currently, the low laser percent is 3% as this doesn't affect the <br />
+silica glass rods we are using, however, the option can be set in the <br />
+script above.  </p>
 
-<h2 id="parameters">Parameters</h2>
+<h2 id="parameters">Parameters  </h2>
 
-<p>shot_percent : float
-    PWM laser percent.
-shot_time : float
-    Time of shot in ms.
-num_shots : int
-    Number of consecutive shots</p>
+<p>shot_percent : float <br />
+    PWM laser percent. <br />
+shot_time : float <br />
+    Time of shot in ms. <br />
+num_shots : int <br />
+    Number of consecutive shots  </p>
 
-<h2 id="returns">Returns</h2>
+<h2 id="returns">Returns  </h2>
 
-<p>dict
-    Dict containing average interval time, total time, and any response 
-    from UC-2000</p>
+<p>dict <br />
+    Dict containing average interval time, total time, and any response <br />
+    from UC-2000  </p>
 
-<h2 id="notes">Notes</h2>
+<h2 id="notes">Notes  </h2>
 
-<p>Shot time can be guaranteed but time between shots might be less
-accurate.</p>
+<p>Shot time can be guaranteed but time between shots might be less <br />
+accurate.  </p>
 
-<p>If shooting more than once, the time between shots is the same time as 
-the shot time.</p>
+<p>If shooting more than once, the time between shots is the same time as <br />
+the shot time.  </p>
 
-<h2 id="examples">Examples</h2>
+<h2 id="examples">Examples  </h2>
 
-<pre><code>&gt;&gt;&gt; laser = UC2000Controller(model=25)
-&gt;&gt;&gt; with laser:
+<pre><code>&gt;&gt;&gt; laser = UC2000Controller(model=25)  
+&gt;&gt;&gt; with laser:  
 ...     laser.shoot(10, 500, 2)
 </code></pre>
 
@@ -1993,77 +1993,77 @@ the shot time.</p>
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Message</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial </span>
-<span class="sd">    port.</span>
+<span class="sd">    REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial   </span>
+<span class="sd">    port.  </span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    command : {&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;,</span>
-<span class="sd">                &quot;mode&quot;, &quot;lase&quot;, &quot;percent&quot;, &quot;status_request&quot;}</span>
-<span class="sd">        Command byte.</span>
-<span class="sd">    data : float</span>
-<span class="sd">        Data for PWM (or SET for closed loop) command.</span>
-<span class="sd">    checksum : bool</span>
-<span class="sd">        Checksum protocol mode.</span>
+<span class="sd">    Parameters  </span>
+<span class="sd">    ----------  </span>
+<span class="sd">    command : {&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;,  </span>
+<span class="sd">                &quot;mode&quot;, &quot;lase&quot;, &quot;percent&quot;, &quot;status_request&quot;}  </span>
+<span class="sd">        Command byte.  </span>
+<span class="sd">    data : float  </span>
+<span class="sd">        Data for PWM (or SET for closed loop) command.  </span>
+<span class="sd">    checksum : bool  </span>
+<span class="sd">        Checksum protocol mode.  </span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    command</span>
-<span class="sd">    data</span>
-<span class="sd">    checksum</span>
-<span class="sd">    message_bytes</span>
+<span class="sd">    Attributes  </span>
+<span class="sd">    ----------  </span>
+<span class="sd">    command  </span>
+<span class="sd">    data  </span>
+<span class="sd">    checksum  </span>
+<span class="sd">    message_bytes  </span>
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    add_no_carry(*args)</span>
+<span class="sd">    Methods  </span>
+<span class="sd">    -------  </span>
+<span class="sd">    add_no_carry(*args)  </span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    There are 5 types of messages with different formats sent;</span>
-<span class="sd">        Setup (&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;)</span>
-<span class="sd">        Mode (&quot;mode&quot;)</span>
-<span class="sd">        PWM (or closed loop SET) (&quot;percent&quot;)</span>
-<span class="sd">        Lase (&quot;lase&quot;)</span>
-<span class="sd">        Status Request</span>
+<span class="sd">    Notes  </span>
+<span class="sd">    -----  </span>
+<span class="sd">    There are 5 types of messages with different formats sent;  </span>
+<span class="sd">        Setup (&quot;pwm_freq&quot;, &quot;gate_logic&quot;, &quot;max_pwm&quot;, &quot;lase_on_power_up&quot;)  </span>
+<span class="sd">        Mode (&quot;mode&quot;)  </span>
+<span class="sd">        PWM (or closed loop SET) (&quot;percent&quot;)  </span>
+<span class="sd">        Lase (&quot;lase&quot;)  </span>
+<span class="sd">        Status Request  </span>
 
-<span class="sd">    Setup Mode, and Lase commands have the byte sequence:</span>
-<span class="sd">        STX&lt;Command&gt;&lt;Checksum&gt;</span>
-<span class="sd">        STX - start transmission byte.</span>
-<span class="sd">        The checksum byte is the one&#39;s compliment of the Command byte.</span>
+<span class="sd">    Setup Mode, and Lase commands have the byte sequence:  </span>
+<span class="sd">        STX&lt;Command&gt;&lt;Checksum&gt;  </span>
+<span class="sd">        STX - start transmission byte.  </span>
+<span class="sd">        The checksum byte is the one&#39;s compliment of the Command byte.  </span>
 
-<span class="sd">    PWM (or SET) command byte sequence:</span>
-<span class="sd">        STX&lt;Command&gt;&lt;Data Byte&gt;&lt;Checksum&gt;</span>
-<span class="sd">        Data byte is the PWM percentage multipled by 2, converted into hex.</span>
-<span class="sd">        The checksum byte is the adding without carry between command and</span>
-<span class="sd">        data byte and then performing the one&#39;s compliment.</span>
+<span class="sd">    PWM (or SET) command byte sequence:  </span>
+<span class="sd">        STX&lt;Command&gt;&lt;Data Byte&gt;&lt;Checksum&gt;  </span>
+<span class="sd">        Data byte is the PWM percentage multipled by 2, converted into hex.  </span>
+<span class="sd">        The checksum byte is the adding without carry between command and  </span>
+<span class="sd">        data byte and then performing the one&#39;s compliment.  </span>
 
-<span class="sd">    Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK</span>
-<span class="sd">    (0x3F). A NAK is sent if there is no valid command or checksum byte</span>
-<span class="sd">    sent within 1s of STX byte or if the checksum byte is wrong.</span>
+<span class="sd">    Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK  </span>
+<span class="sd">    (0x3F). A NAK is sent if there is no valid command or checksum byte  </span>
+<span class="sd">    sent within 1s of STX byte or if the checksum byte is wrong.  </span>
 
-<span class="sd">    Status Request:</span>
-<span class="sd">        Single byte to tell UC-2000 to report it&#39;s status.</span>
+<span class="sd">    Status Request:  </span>
+<span class="sd">        Single byte to tell UC-2000 to report it&#39;s status.  </span>
 <span class="sd">    </span>
-<span class="sd">    Response from Status Request is</span>
-<span class="sd">        ACK&lt;Status Byte1&gt;&lt;Status Byte2&gt;&lt;PWM Byte&gt;&lt;Power Byte&gt;&lt;Checksum&gt;</span>
-<span class="sd">        Refer to the UC-2000 manual for futher details about the contents</span>
-<span class="sd">        of the response bytes. Currently not using so not as important.</span>
+<span class="sd">    Response from Status Request is  </span>
+<span class="sd">        ACK&lt;Status Byte1&gt;&lt;Status Byte2&gt;&lt;PWM Byte&gt;&lt;Power Byte&gt;&lt;Checksum&gt;  </span>
+<span class="sd">        Refer to the UC-2000 manual for futher details about the contents  </span>
+<span class="sd">        of the response bytes. Currently not using so not as important.  </span>
 
-<span class="sd">    TODO: include parsing response byte from UC-2000</span>
+<span class="sd">    TODO: include parsing response byte from UC-2000  </span>
 
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; message = Message(&quot;percent&quot;, 10, False)</span>
-<span class="sd">    &gt;&gt;&gt; message.message_bytes()</span>
-<span class="sd">    [126, 127, 20]</span>
+<span class="sd">    Examples  </span>
+<span class="sd">    --------  </span>
+<span class="sd">    &gt;&gt;&gt; message = Message(&quot;percent&quot;, 10, False)  </span>
+<span class="sd">    &gt;&gt;&gt; message.message_bytes()  </span>
+<span class="sd">    [126, 127, 20]  </span>
 
-<span class="sd">    Create message for setting PWM percent to 10%.</span>
+<span class="sd">    Create message for setting PWM percent to 10%.  </span>
 
-<span class="sd">    &gt;&gt;&gt; message = Message(&quot;lase&quot;, True, False)</span>
-<span class="sd">    &gt;&gt;&gt; message.message_bytes()</span>
-<span class="sd">    [126, 127, 117]</span>
+<span class="sd">    &gt;&gt;&gt; message = Message(&quot;lase&quot;, True, False)  </span>
+<span class="sd">    &gt;&gt;&gt; message.message_bytes()  </span>
+<span class="sd">    [126, 127, 117]  </span>
 
-<span class="sd">    Create message for turning on command signal.</span>
+<span class="sd">    Create message for turning on command signal.  </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">checksum</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Inits a Message object.&quot;&quot;&quot;</span>
@@ -2074,13 +2074,13 @@ the shot time.</p>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">message_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creates and returns REMOTE message byte sequence.</span>
+<span class="sd">        Creates and returns REMOTE message byte sequence.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        message : list of int</span>
-<span class="sd">            The message sequence containing the start byte, command byte, </span>
-<span class="sd">            [data byte (optional)], and checksum (optional)</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        message : list of int  </span>
+<span class="sd">            The message sequence containing the start byte, command byte,   </span>
+<span class="sd">            [data byte (optional)], and checksum (optional)  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="ow">in</span> <span class="n">UC2000_COMMAND_BYTES</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">command_byte</span> <span class="o">=</span> <span class="n">UC2000_COMMAND_BYTES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
@@ -2118,30 +2118,30 @@ the shot time.</p>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">add_no_carry</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Addition without carry; addition is not carried to the next decimal up.</span>
+<span class="sd">        Addition without carry; addition is not carried to the next decimal up.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        *args : iterable (not string)</span>
-<span class="sd">            Iterate of ints to add without carry.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        *args : iterable (not string)  </span>
+<span class="sd">            Iterate of ints to add without carry.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        final_sum : int</span>
-<span class="sd">            the result...</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        final_sum : int  </span>
+<span class="sd">            the result...  </span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 1)</span>
-<span class="sd">        2</span>
+<span class="sd">        Examples  </span>
+<span class="sd">        --------  </span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 1)  </span>
+<span class="sd">        2  </span>
 
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 18)</span>
-<span class="sd">        19</span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 18)  </span>
+<span class="sd">        19  </span>
 
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 19)</span>
-<span class="sd">        10</span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 19)  </span>
+<span class="sd">        10  </span>
 
-<span class="sd">        The &#39;10&#39; is not carried over to the next decimal.</span>
+<span class="sd">        The &#39;10&#39; is not carried over to the next decimal.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_digits</span> <span class="o">=</span> <span class="p">[]</span>
         
@@ -2173,75 +2173,75 @@ the shot time.</p>
 
             </details>
 
-                    <div class="docstring"><p>REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial 
-port.</p>
+                    <div class="docstring"><p>REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial <br />
+port.  </p>
 
-<h2 id="parameters">Parameters</h2>
+<h2 id="parameters">Parameters  </h2>
 
-<p>command : {"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up",
-            "mode", "lase", "percent", "status_request"}
-    Command byte.
-data : float
-    Data for PWM (or SET for closed loop) command.
-checksum : bool
-    Checksum protocol mode.</p>
+<p>command : {"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up", <br />
+            "mode", "lase", "percent", "status_request"} <br />
+    Command byte. <br />
+data : float <br />
+    Data for PWM (or SET for closed loop) command. <br />
+checksum : bool <br />
+    Checksum protocol mode.  </p>
 
-<h2 id="attributes">Attributes</h2>
+<h2 id="attributes">Attributes  </h2>
 
-<p>command
-data
-checksum
-message_bytes</p>
+<p>command <br />
+data <br />
+checksum <br />
+message_bytes  </p>
 
-<h2 id="methods">Methods</h2>
+<h2 id="methods">Methods  </h2>
 
-<p>add_no_carry(*args)</p>
+<p>add_no_carry(*args)  </p>
 
-<h2 id="notes">Notes</h2>
+<h2 id="notes">Notes  </h2>
 
-<p>There are 5 types of messages with different formats sent;
-    Setup ("pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up")
-    Mode ("mode")
-    PWM (or closed loop SET) ("percent")
-    Lase ("lase")
-    Status Request</p>
+<p>There are 5 types of messages with different formats sent; <br />
+    Setup ("pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up") <br />
+    Mode ("mode") <br />
+    PWM (or closed loop SET) ("percent") <br />
+    Lase ("lase") <br />
+    Status Request  </p>
 
-<p>Setup Mode, and Lase commands have the byte sequence:
-    STX<Command><Checksum>
-    STX - start transmission byte.
-    The checksum byte is the one's compliment of the Command byte.</p>
+<p>Setup Mode, and Lase commands have the byte sequence: <br />
+    STX<Command><Checksum> <br />
+    STX - start transmission byte. <br />
+    The checksum byte is the one's compliment of the Command byte.  </p>
 
-<p>PWM (or SET) command byte sequence:
-    STX<Command><Data Byte><Checksum>
-    Data byte is the PWM percentage multipled by 2, converted into hex.
-    The checksum byte is the adding without carry between command and
-    data byte and then performing the one's compliment.</p>
+<p>PWM (or SET) command byte sequence: <br />
+    STX<Command><Data Byte><Checksum> <br />
+    Data byte is the PWM percentage multipled by 2, converted into hex. <br />
+    The checksum byte is the adding without carry between command and <br />
+    data byte and then performing the one's compliment.  </p>
 
-<p>Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK
-(0x3F). A NAK is sent if there is no valid command or checksum byte
-sent within 1s of STX byte or if the checksum byte is wrong.</p>
+<p>Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK <br />
+(0x3F). A NAK is sent if there is no valid command or checksum byte <br />
+sent within 1s of STX byte or if the checksum byte is wrong.  </p>
 
-<p>Status Request:
-    Single byte to tell UC-2000 to report it's status.</p>
+<p>Status Request: <br />
+    Single byte to tell UC-2000 to report it's status.  </p>
 
-<p>Response from Status Request is
-    ACK<Status Byte1><Status Byte2><PWM Byte><Power Byte><Checksum>
-    Refer to the UC-2000 manual for futher details about the contents
-    of the response bytes. Currently not using so not as important.</p>
+<p>Response from Status Request is <br />
+    ACK<Status Byte1><Status Byte2><PWM Byte><Power Byte><Checksum> <br />
+    Refer to the UC-2000 manual for futher details about the contents <br />
+    of the response bytes. Currently not using so not as important.  </p>
 
-<p>TODO: include parsing response byte from UC-2000</p>
+<p>TODO: include parsing response byte from UC-2000  </p>
 
-<h2 id="examples">Examples</h2>
+<h2 id="examples">Examples  </h2>
 
-<pre><code>&gt;&gt;&gt; message = Message("percent", 10, False)
-&gt;&gt;&gt; message.message_bytes()
+<pre><code>&gt;&gt;&gt; message = Message("percent", 10, False)  
+&gt;&gt;&gt; message.message_bytes()  
 [126, 127, 20]
 </code></pre>
 
-<p>Create message for setting PWM percent to 10%.</p>
+<p>Create message for setting PWM percent to 10%.  </p>
 
-<pre><code>&gt;&gt;&gt; message = Message("lase", True, False)
-&gt;&gt;&gt; message.message_bytes()
+<pre><code>&gt;&gt;&gt; message = Message("lase", True, False)  
+&gt;&gt;&gt; message.message_bytes()  
 [126, 127, 117]
 </code></pre>
 
@@ -2275,13 +2275,13 @@ sent within 1s of STX byte or if the checksum byte is wrong.</p>
             <span class="name">message_bytes</span>
         </div>
 
-                    <div class="docstring"><p>Creates and returns REMOTE message byte sequence.</p>
+                    <div class="docstring"><p>Creates and returns REMOTE message byte sequence.  </p>
 
-<h2 id="returns">Returns</h2>
+<h2 id="returns">Returns  </h2>
 
-<p>message : list of int
-    The message sequence containing the start byte, command byte, 
-    [data byte (optional)], and checksum (optional)</p>
+<p>message : list of int <br />
+    The message sequence containing the start byte, command byte, <br />
+    [data byte (optional)], and checksum (optional)  </p>
 </div>
 
 
@@ -2299,30 +2299,30 @@ sent within 1s of STX byte or if the checksum byte is wrong.</p>
                 <div class="codehilite"><pre><span></span>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">add_no_carry</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Addition without carry; addition is not carried to the next decimal up.</span>
+<span class="sd">        Addition without carry; addition is not carried to the next decimal up.  </span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        *args : iterable (not string)</span>
-<span class="sd">            Iterate of ints to add without carry.</span>
+<span class="sd">        Parameters  </span>
+<span class="sd">        ----------  </span>
+<span class="sd">        *args : iterable (not string)  </span>
+<span class="sd">            Iterate of ints to add without carry.  </span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        final_sum : int</span>
-<span class="sd">            the result...</span>
+<span class="sd">        Returns  </span>
+<span class="sd">        -------  </span>
+<span class="sd">        final_sum : int  </span>
+<span class="sd">            the result...  </span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 1)</span>
-<span class="sd">        2</span>
+<span class="sd">        Examples  </span>
+<span class="sd">        --------  </span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 1)  </span>
+<span class="sd">        2  </span>
 
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 18)</span>
-<span class="sd">        19</span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 18)  </span>
+<span class="sd">        19  </span>
 
-<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 19)</span>
-<span class="sd">        10</span>
+<span class="sd">        &gt;&gt;&gt; add_no_carry(1, 19)  </span>
+<span class="sd">        10  </span>
 
-<span class="sd">        The &#39;10&#39; is not carried over to the next decimal.</span>
+<span class="sd">        The &#39;10&#39; is not carried over to the next decimal.  </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_digits</span> <span class="o">=</span> <span class="p">[]</span>
         
@@ -2354,31 +2354,31 @@ sent within 1s of STX byte or if the checksum byte is wrong.</p>
 
             </details>
 
-                    <div class="docstring"><p>Addition without carry; addition is not carried to the next decimal up.</p>
+                    <div class="docstring"><p>Addition without carry; addition is not carried to the next decimal up.  </p>
 
-<h2 id="parameters">Parameters</h2>
+<h2 id="parameters">Parameters  </h2>
 
-<p>*args : iterable (not string)
-    Iterate of ints to add without carry.</p>
+<p>*args : iterable (not string) <br />
+    Iterate of ints to add without carry.  </p>
 
-<h2 id="returns">Returns</h2>
+<h2 id="returns">Returns  </h2>
 
-<p>final_sum : int
-    the result...</p>
+<p>final_sum : int <br />
+    the result...  </p>
 
-<h2 id="examples">Examples</h2>
+<h2 id="examples">Examples  </h2>
 
-<pre><code>&gt;&gt;&gt; add_no_carry(1, 1)
-2
-
-
-
-&gt;&gt;&gt; add_no_carry(1, 18)
-19
+<pre><code>&gt;&gt;&gt; add_no_carry(1, 1)  
+2  
 
 
 
-&gt;&gt;&gt; add_no_carry(1, 19)
+&gt;&gt;&gt; add_no_carry(1, 18)  
+19  
+
+
+
+&gt;&gt;&gt; add_no_carry(1, 19)  
 10
 </code></pre>
 
