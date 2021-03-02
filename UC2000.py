@@ -7,27 +7,14 @@ import time
 # =============================================================================
 # Parameters for UC2000 object
 # =============================================================================
-# Minimum step size of PWM percent
-PERCENT_STEP =          0.5
-# Transforming PWM percent incompatible without checksum to compatible ones
-PERCENT_TRANSFORMS =    {63: 62.5}
-# Valid shot time range
-SHOT_TIME_RANGE =       [50, 10000]
-# Minimum percent required for laser to be considered OFF to material without
-# turning the Command signal OFF
-MIN_LASE_PERCENT =      2
-UC2000_DEFAULT_SETTINGS = {
-    "pwm_freq":         20,   # Higher PWM frequency means lower ripple in optical beam response
-    "gate_logic":       "up",
-    "max_pwm":          95,
-    "lase_on_power_up": False,
-    "mode":             "manual", # this will be different for reflow and laser machining
-    "lase":             False,
-    "percent":          0,
-}
 
-# TODO: update RC params style?
-# TODO: set defaults list into controller as argument for changable settings
+_PERCENT_TRANSFORMS =    {63: 62.5}
+# Transforming PWM percent incompatible without checksum to compatible ones
+SHOT_TIME_RANGE =       [50, 10000]
+"""Valid shot time range."""
+MIN_LASE_PERCENT =      2
+"""Minimum percent required for laser to be considered OFF to material without
+turning the Command signal OFF."""
 
 class UC2000Controller:
     """
@@ -113,6 +100,22 @@ class UC2000Controller:
 
     Demonstration of the .percent and .lase commands
     """
+
+    percent_step = 0.5
+    """Minimum step size of PWM percent."""
+
+    _default = {
+        "pwm_freq":         20,   # Higher PWM frequency means lower ripple in optical beam response
+        "gate_logic":       "up",
+        "max_pwm":          95,
+        "lase_on_power_up": False,
+        "mode":             "manual", # this will be different for reflow and laser machining
+        "lase":             False,
+        "percent":          0,
+    }
+    # TODO: update RC params style?
+    # TODO: set defaults list into controller as argument for changable settings
+
     def __init__(self, model: int, open_labjack=False):
         """Inits a UC2000 object."""
         self.model = model
@@ -453,14 +456,14 @@ class UC2000Controller:
     def reset(self):
         """Reset all UC-2000 settings to default."""
         # TODO: have reset flag such that it forces all the bottom changes
-        self.pwm_freq = UC2000_DEFAULT_SETTINGS["pwm_freq"]
-        self.gate_logic = UC2000_DEFAULT_SETTINGS["gate_logic"]
-        self.max_pwm = UC2000_DEFAULT_SETTINGS["max_pwm"]
-        self.lase_on_power_up = UC2000_DEFAULT_SETTINGS["lase_on_power_up"]
+        self.pwm_freq = self._default["pwm_freq"]
+        self.gate_logic = self._default["gate_logic"]
+        self.max_pwm = self._default["max_pwm"]
+        self.lase_on_power_up = self._default["lase_on_power_up"]
 
-        self.mode = UC2000_DEFAULT_SETTINGS["mode"]
-        self.lase = UC2000_DEFAULT_SETTINGS["lase"]
-        self.percent = UC2000_DEFAULT_SETTINGS["percent"]    # in percent
+        self.mode = self._default["mode"]
+        self.lase = self._default["lase"]
+        self.percent = self._default["percent"]    # in percent
 
     def _pwm_percent_limits(self, limit_per: float):
         """
@@ -494,7 +497,7 @@ class UC2000Controller:
             setpoint = 0
         else:
             # Changes setpoint to be multiple of 0.5
-            setpoint = PERCENT_STEP * round(limit_per / PERCENT_STEP)
+            setpoint = self.percent_step * round(limit_per / self.percent_step)
 
         # FIXME: only change this for if checksum if False
         # Changes setpoint from 63 to 62.5% if checksum mode is disabled
@@ -625,12 +628,9 @@ class UC2000Controller:
 # =============================================================================
 # Parameters for Message object
 # =============================================================================
-# Start transmission byte (STX)
-START_BYTE =            0x5b
-STATUS_REQUEST_BYTE =   0x7e
-SET_PERCENT_BYTE =      0x7f
 
-UC2000_COMMAND_BYTES = {
+# Dict for converting between command name and byte
+_UC2000_COMMAND_BYTES = {
     "pwm_freq": {
         5: 0x77,
         10: 0x78,
@@ -723,6 +723,11 @@ class Message():
 
     Create message for turning on command signal.
     """
+    _start_byte = 0x5b
+    # (STX) First byte sent to initialise communication, not needed when sending request.
+    _status_request_byte = 0x7e
+    _set_percent_byte = 0x7f
+
     def __init__(self, command: str, data, checksum: bool):
         """Inits a ``Message`` object."""
         self.command = command
@@ -743,10 +748,10 @@ class Message():
             The message sequence containing the start byte, command byte,
             [data byte (optional)], and checksum (optional)
         """
-        if self.command in UC2000_COMMAND_BYTES.keys():
-            command_byte = UC2000_COMMAND_BYTES[self.command][self.data]
+        if self.command in _UC2000_COMMAND_BYTES.keys():
+            command_byte = _UC2000_COMMAND_BYTES[self.command][self.data]
 
-            message = [START_BYTE, command_byte]
+            message = [self._start_byte, command_byte]
 
             if self.checksum:
                 # without data, the checksum is the one's compliment of the
@@ -756,20 +761,23 @@ class Message():
 
         elif self.command == "percent":
             try:
-                message = [START_BYTE, SET_PERCENT_BYTE, int(2*self.data)]
+                message = [
+                    self._start_byte, self._set_percent_byte, int(2*self.data)]
             except ValueError:
-                raise ValueError("Type of data is invalid. Needs to be float or int.")
+                raise ValueError(
+            "Type of data is invalid. Needs to be float or int.")
 
             if self.checksum:
                 # with data, the checksum is the addition without carry of the
                 # command and data byte and then one's complimented
                 checksum_byte = (
-                    ~self.add_no_carry(SET_PERCENT_BYTE, self.data) & 0xff
+                    ~self.add_no_carry(
+                        self._set_percent_byte, self.data) & 0xff
                     )
                 message.append(checksum_byte)
 
         elif self.command == "status_request":
-            message = [STATUS_REQUEST_BYTE]
+            message = [self._status_request_byte]
 
         else:
             raise ValueError("Command is not recognised by UC-2000")
