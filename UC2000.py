@@ -31,107 +31,107 @@ UC2000_DEFAULT_SETTINGS = {
 
 class UC2000Controller:
     """
-    An interface to SYNRAD 48 series CO2 lasers through UC-2000 controller.  
+    An interface to SYNRAD 48 series CO2 lasers through UC-2000 controller.
 
-    Communication to the UC-2000 controller from a host using REMOTE  
-    settings are facilitated through the Serial RS-232 protocol and port.  
+    Communication to the UC-2000 controller from a host using REMOTE
+    settings are facilitated through the Serial RS-232 protocol and port.
 
-    Parameters  
-    ----------  
-    model : {25, 50}  
-        SYNRAD 48 series laser model number, indicates the maximum  
-        optical power output  
-    open_labjack : LabJack object  
-        A LabJack object to transmit messages to the UC-2000,  
-        by default False.  
+    Parameters
+    ----------
+    model : {25, 50}
+        SYNRAD 48 series laser model number, indicates the maximum
+        optical power output
+    open_labjack : LabJack object
+        A LabJack object to transmit messages to the UC-2000,
+        by default False.
 
-    Attributes  
-    ----------  
-    lase  
-    percent  
-    pwm_freq  
-    gate_logic  
-    max_pwm  
-    lase_on_power_up  
-    mode  
-    checksum  
-    max_power  
-    power  
-    model  
-    open_labjack  
-    PARAMETER_NAME_hist : list  
-        Entire history of previous PARAMETER_NAME from instantiation.  
+    Attributes
+    ----------
+    lase
+    percent
+    pwm_freq
+    gate_logic
+    max_pwm
+    lase_on_power_up
+    mode
+    checksum
+    max_power
+    power
+    model
+    open_labjack
+    PARAMETER_NAME_hist : list
+        Entire history of previous PARAMETER_NAME from instantiation.
 
-    Methods  
-    -------  
-    reset()  
-        Reset all UC-2000 to default.  
-    shoot(shot_percent, shot_time, num_shots)  
-        Fires a number of shots of a given optical power percent for a   
-        given time.  
+    Methods
+    -------
+    reset()
+        Reset all UC-2000 to default.
+    shoot(shot_percent, shot_time, num_shots)
+        Fires a number of shots of a given optical power percent for a
+        given time.
 
-    Notes  
-    -----  
-    Pins 2, 3, and 5 of a serial port are used for receive, transmit, and   
-    ground respectively.  
-    The host serial port configuration must be  
-        Baud rate       9600  
-        Data bits       8 bits  
-        Parity          None  
-        Stop bits       1 bit  
-        Flow control    None  
+    Notes
+    -----
+    Pins 2, 3, and 5 of a serial port are used for receive, transmit, and
+    ground respectively.
+    The host serial port configuration must be
+        Baud rate       9600
+        Data bits       8 bits
+        Parity          None
+        Stop bits       1 bit
+        Flow control    None
 
-    For further details please refer to:  
-    https://synrad.com/en/products/accessories/uc-2000  
+    For further details please refer to:
+    https://synrad.com/en/products/accessories/uc-2000
 
-    Messages are sent to the UC-2000 from the host via a DAQ, in this case  
-    a LabJack T4/T7 is used. However, any source that can produce RS-232   
-    asynchronous communication can be used. If a Labjack object or no other  
-    DAQ is provided then the UC-2000 only stores messages.  
+    Messages are sent to the UC-2000 from the host via a DAQ, in this case
+    a LabJack T4/T7 is used. However, any source that can produce RS-232
+    asynchronous communication can be used. If a Labjack object or no other
+    DAQ is provided then the UC-2000 only stores messages.
 
-    TODO: LUA scripting - call script to improve timings  
-    TODO: gate pull-up/down, SYNRAD doesn't know whether gate or comamnd signal activate lasing is faster. Trial and error?  
+    TODO: LUA scripting - call script to improve timings
+    TODO: gate pull-up/down, SYNRAD doesn't know whether gate or comamnd signal activate lasing is faster. Trial and error?
 
-    TODO: receiving communication from the labjack... or using the UC2000 response  
-        if check_ack:  
-            daq_response = daq_stats["response"]  
+    TODO: receiving communication from the labjack... or using the UC2000 response
+        if check_ack:
+            daq_response = daq_stats["response"]
 
-            if not isinstance(daq_response, list):  
-                daq_response = [daq_response]  
+            if not isinstance(daq_response, list):
+                daq_response = [daq_response]
 
-            if UC2000_RESPONSE["ack"] in daq_response:  
-                self.laser_controller.set_any(setting, option)  
-                gui_message = "\"{0}\" has changed to \"{1}\"".format(setting, option)  
-                action = "continue"  
-                outcome = option  
-            elif UC2000_RESPONSE["nak"] in daq_response:  
-                gui_message = "\"{0}\" remains unchanged as {1} because UC2000 didn't accept the message".format(setting, prev)  
-                action = "previous"  
-                outcome = prev  
+            if UC2000_RESPONSE["ack"] in daq_response:
+                self.laser_controller.set_any(setting, option)
+                gui_message = "\"{0}\" has changed to \"{1}\"".format(setting, option)
+                action = "continue"
+                outcome = option
+            elif UC2000_RESPONSE["nak"] in daq_response:
+                gui_message = "\"{0}\" remains unchanged as {1} because UC2000 didn't accept the message".format(setting, prev)
+                action = "previous"
+                outcome = prev
             else:
-                gui_message = "Setting \"{0}\" remains unchanged as {1} because there has been no response from UC2000".format(setting, prev)  
-                action = "previous"  
-                outcome = prev  
-        else:  
-            self.laser_controller.set_any(setting, option)  
-            gui_message = "Setting \"{0}\" has changed to \"{1}\"".format(setting, option)  
-            action = "continue"  
-            outcome = option  
+                gui_message = "Setting \"{0}\" remains unchanged as {1} because there has been no response from UC2000".format(setting, prev)
+                action = "previous"
+                outcome = prev
+        else:
+            self.laser_controller.set_any(setting, option)
+            gui_message = "Setting \"{0}\" has changed to \"{1}\"".format(setting, option)
+            action = "continue"
+            outcome = option
 
-    TODO: test with slightly longer wait time between asynch communications  
-    TODO: can send remote status byte inbetween start and end transmission byte of any other  
-    command - maybe use to check option on laser  
+    TODO: test with slightly longer wait time between asynch communications
+    TODO: can send remote status byte inbetween start and end transmission byte of any other
+    command - maybe use to check option on laser
 
-    Examples  
-    --------  
-    >>> laser = UC2000Controller(model=25)  
-    >>> with laser:  
-    ...     laser.percent = 20  
-    ...     laser.lase = True  
-    ...     laser.percent = 0  
-    ...     laser.lase = False  
+    Examples
+    --------
+    >>> laser = UC2000Controller(model=25)
+    >>> with laser:
+    ...     laser.percent = 20
+    ...     laser.lase = True
+    ...     laser.percent = 0
+    ...     laser.lase = False
 
-    Demonstration of the .percent and .lase commands  
+    Demonstration of the .percent and .lase commands
     """
     def __init__(self, model: int, open_labjack=False):
         """Inits a UC2000 object."""
@@ -149,9 +149,9 @@ class UC2000Controller:
         self.checksum_hist = []
         self.shot_time_hist = []
 
-        # Assumes that Checksum mode is enabled... 
+        # Assumes that Checksum mode is enabled...
         # and why would we not use checksum mode anyways
-        self.checksum = True      
+        self.checksum = True
 
         self.reset()
 
@@ -163,7 +163,7 @@ class UC2000Controller:
             print("Laser process stopped by user")
             self.percent = 0
             self.lase = False
-            # returning False because we want to allow nested with statements 
+            # returning False because we want to allow nested with statements
             # above the stack to also use their __exit__ which turns the laser
             # off and low set percent.
             return False
@@ -177,29 +177,29 @@ class UC2000Controller:
     def lase(self):
         """Return lase state."""
         return self._lase
-    
+
     @lase.setter
     def lase(self, state: bool):
         """
-        Set lase state to either True or False.  
+        Set lase state to either True or False.
 
-        Parameters  
-        ----------  
-        state : bool  
-            New set lase state.  
+        Parameters
+        ----------
+        state : bool
+            New set lase state.
 
-        Notes  
-        -----  
-        Lase state is controlled by a Command signal for LOW (0 - 0.5V DC)   
-        and HIGH (3.5 - 5V DC).  
+        Notes
+        -----
+        Lase state is controlled by a Command signal for LOW (0 - 0.5V DC)
+        and HIGH (3.5 - 5V DC).
 
-        When the Command signal is low for >200us, the UC-2000 always supplies   
-        laser with 5kHz, 1us tickle pulse that pre-ionises the laser gas to   
-        just below lasing threshold. Any increase in pulse width causes   
-        emission as enough energy is added to the plasma.  
+        When the Command signal is low for >200us, the UC-2000 always supplies
+        laser with 5kHz, 1us tickle pulse that pre-ionises the laser gas to
+        just below lasing threshold. Any increase in pulse width causes
+        emission as enough energy is added to the plasma.
 
-        If a labjack is connected, then a LASE message will be sent to the   
-        UC2000.  
+        If a labjack is connected, then a LASE message will be sent to the
+        UC2000.
         """
         self._lase = state
         self.lase_hist.append(state)
@@ -217,26 +217,26 @@ class UC2000Controller:
     @percent.setter
     def percent(self, per: float):
         """
-        Set laser percent (PWM signal duty cycle percentage), limited to   
-        between 0 and 95/99% in steps of 0.5%.  
+        Set laser percent (PWM signal duty cycle percentage), limited to
+        between 0 and 95/99% in steps of 0.5%.
 
-        Parameters  
-        ----------  
-        per : float  
-            New PWM duty cycle percentage, in seteps of 0.5%  
-        
+        Parameters
+        ----------
+        per : float
+            New PWM duty cycle percentage, in seteps of 0.5%
+
         Notes
         -----
-        The laser percent defaults to previous percent if new percent is   
-        outside of the permitted range. If self.checksum flag is True, then the  
-        set laser percent cannot be 63% defaults to 62.5% instead.  
+        The laser percent defaults to previous percent if new percent is
+        outside of the permitted range. If self.checksum flag is True, then the
+        set laser percent cannot be 63% defaults to 62.5% instead.
 
-        The PWM signal duty cycle controls how much of the Command signal's   
-        pulse is HIGH. When the Command signal is HIGH, the laser RF amplifiers   
-        are HIGH and this increases the optical output power.  
+        The PWM signal duty cycle controls how much of the Command signal's
+        pulse is HIGH. When the Command signal is HIGH, the laser RF amplifiers
+        are HIGH and this increases the optical output power.
 
-        If a labjack is connected, then a SET message will be sent to the   
-        UC2000.  
+        If a labjack is connected, then a SET message will be sent to the
+        UC2000.
         """
         per = self._pwm_percent_limits(per)
         self._percent = per
@@ -254,22 +254,22 @@ class UC2000Controller:
     @pwm_freq.setter
     def pwm_freq(self, freq: int):
         """
-        Set laser PWM frequency to either 5, 10, or 20kHz.  
+        Set laser PWM frequency to either 5, 10, or 20kHz.
 
-        Parameters  
-        ----------  
-        freq : {5, 10, 20}  
-            New laser percent.  
+        Parameters
+        ----------
+        freq : {5, 10, 20}
+            New laser percent.
 
-        Notes  
-        -----  
-        The PWM frequency of the Command signal, where the laser optical output   
-        follows the Command signal with a rise/fall time of 75-150us. A higher   
-        PWM frequency means the laser output response has less ripple and at   
-        20kHz the laser output is nearly CW with small ripple.  
+        Notes
+        -----
+        The PWM frequency of the Command signal, where the laser optical output
+        follows the Command signal with a rise/fall time of 75-150us. A higher
+        PWM frequency means the laser output response has less ripple and at
+        20kHz the laser output is nearly CW with small ripple.
 
-        If a labjack is connected, then a SETUP message will be sent to the   
-        UC2000.  
+        If a labjack is connected, then a SETUP message will be sent to the
+        UC2000.
         """
         self._pwm_freq = freq
         self.pwm_freq_hist.append(freq)
@@ -282,37 +282,37 @@ class UC2000Controller:
     def gate_logic(self):
         """Return gate pull up/down status."""
         return self._gate_logic
-    
+
     @gate_logic.setter
     def gate_logic(self, pull: str):
         """
-        Set gate pull up/down status to either pull "up" or "down".  
+        Set gate pull up/down status to either pull "up" or "down".
 
-        Parameters  
-        ----------  
-        pull : {"up", "down"}  
-            New gate pull status.  
+        Parameters
+        ----------
+        pull : {"up", "down"}
+            New gate pull status.
 
-        Notes  
-        -----  
-        Gate pull up indicates that the laser will fire without a gate signal.  
-        This means the UC-2000 connects an internal resistor between the gate  
-        and command signal.  
+        Notes
+        -----
+        Gate pull up indicates that the laser will fire without a gate signal.
+        This means the UC-2000 connects an internal resistor between the gate
+        and command signal.
 
-        Gate pull down means the laser will fire when the gate signal is HIGH   
-        and the command signal is HIGH. A gate signal is supplied to the Gate   
-        BNC input and is either logic LOW (0 - 0.9V DC) or HIGH (2.8 - 5 V DC).   
-        Now, the tickle pulse and command signals are determined by the   
-        Gating amplitude.  
+        Gate pull down means the laser will fire when the gate signal is HIGH
+        and the command signal is HIGH. A gate signal is supplied to the Gate
+        BNC input and is either logic LOW (0 - 0.9V DC) or HIGH (2.8 - 5 V DC).
+        Now, the tickle pulse and command signals are determined by the
+        Gating amplitude.
 
-        Note: PWM and gate pulses are not asynchronous, the edges of both   
-        pulses are not synchronised.  
+        Note: PWM and gate pulses are not asynchronous, the edges of both
+        pulses are not synchronised.
 
-        Input impedence: 50 kOhms  
-        Gate On Time, min: 3.5us (10ms in closed loop mode)/  
+        Input impedence: 50 kOhms
+        Gate On Time, min: 3.5us (10ms in closed loop mode)/
 
-        If a labjack is connected, then a SETUP message will be sent to the   
-        UC2000.  
+        If a labjack is connected, then a SETUP message will be sent to the
+        UC2000.
         """
         self._gate_logic = pull
         self.gate_logic_hist.append(pull)
@@ -329,21 +329,21 @@ class UC2000Controller:
     @max_pwm.setter
     def max_pwm(self, per: int):
         """
-        Set the maximum PWM percentage of the Command signal.  
+        Set the maximum PWM percentage of the Command signal.
 
-        Parameters  
-        ----------  
-        per : {95, 99}  
-            New max PWM percentage.  
+        Parameters
+        ----------
+        per : {95, 99}
+            New max PWM percentage.
 
-        Notes  
-        -----  
-        Synrad lasers have max PWM percentage of 95% by default to increase  
-        longevity of lasers as greater than 95% increases heat load and "may  
-        cause thermal instability and optical degradation."  
+        Notes
+        -----
+        Synrad lasers have max PWM percentage of 95% by default to increase
+        longevity of lasers as greater than 95% increases heat load and "may
+        cause thermal instability and optical degradation."
 
-        If a labjack is connected, then a SETUP message will be sent to the   
-        UC2000.  
+        If a labjack is connected, then a SETUP message will be sent to the
+        UC2000.
         """
         self._max_pwm = per
         self.max_pwm_hist.append(per)
@@ -356,25 +356,25 @@ class UC2000Controller:
     def lase_on_power_up(self):
         """Return lase on power-up status."""
         return self._lase_on_power_up
-    
+
     @lase_on_power_up.setter
     def lase_on_power_up(self, pwr: bool):
         """
-        Set lase on power-up status to either True or False.  
+        Set lase on power-up status to either True or False.
 
-        Parameters  
-        ----------  
-        pwr : bool  
-            New lase on power-up setting.  
+        Parameters
+        ----------
+        pwr : bool
+            New lase on power-up setting.
 
-        Notes  
-        -----  
-        If the lase on power-up status is ON, then the UC-2000 controller will  
-        send a lase signal immediately when the power is turned on. Used only  
-        when access to UC-2000 controller is limited.  
+        Notes
+        -----
+        If the lase on power-up status is ON, then the UC-2000 controller will
+        send a lase signal immediately when the power is turned on. Used only
+        when access to UC-2000 controller is limited.
 
-        If a labjack is connected, then a SETUP message will be sent to the   
-        UC2000.  
+        If a labjack is connected, then a SETUP message will be sent to the
+        UC2000.
         """
         self._lase_on_power_up = pwr
         self.lase_on_power_up_hist.append(pwr)
@@ -391,38 +391,38 @@ class UC2000Controller:
     @mode.setter
     def mode(self, mode_type: str):
         """
-        Set UC-2000 operating mode to 5 possible choices.  
+        Set UC-2000 operating mode to 5 possible choices.
 
-        Parameters  
-        ----------  
-        mode_type : {"manual", "anc", "anv" "man_closed", "anv_closed"}  
-            New operating mode.  
+        Parameters
+        ----------
+        mode_type : {"manual", "anc", "anv" "man_closed", "anv_closed"}
+            New operating mode.
 
-        Notes  
-        -----  
-        MANUAL ("manual")  
-        Laser output power is adjusted by the PWM command signal duty cycle  
-        percentage.  
+        Notes
+        -----
+        MANUAL ("manual")
+        Laser output power is adjusted by the PWM command signal duty cycle
+        percentage.
 
-        ANC ("anc")  
-        Laser power controlled by external 4-20mA current loop. PWM duty cycle  
-        changes proportionally to applied current.  
+        ANC ("anc")
+        Laser power controlled by external 4-20mA current loop. PWM duty cycle
+        changes proportionally to applied current.
 
-        ANV ("anv")  
-        Laser power controlled by external analog 0-10V source where the duty   
-        cycle is proportional to external voltage.  
+        ANV ("anv")
+        Laser power controlled by external analog 0-10V source where the duty
+        cycle is proportional to external voltage.
 
-        MAN. CLOSED ("man_closed")  
-        Closed loop power is ensured by Closed Loop Stablization Kit which  
-        regulates power stability to within +/-2% of the setpoint. Closed loop  
-        settling time is typically 2ms after setpoint change. The recommended  
-        lower and upper control range is 20-80% PWM duty cycle percent.  
+        MAN. CLOSED ("man_closed")
+        Closed loop power is ensured by Closed Loop Stablization Kit which
+        regulates power stability to within +/-2% of the setpoint. Closed loop
+        settling time is typically 2ms after setpoint change. The recommended
+        lower and upper control range is 20-80% PWM duty cycle percent.
 
-        ANV CLOSED ("anv_closed")  
-        Similar to MAN. CLOSED except an external analog voltage is stabilised.  
+        ANV CLOSED ("anv_closed")
+        Similar to MAN. CLOSED except an external analog voltage is stabilised.
 
-        If a labjack is connected, then a MODE message will be sent to the   
-        UC2000.  
+        If a labjack is connected, then a MODE message will be sent to the
+        UC2000.
         """
         self._mode = mode_type.lower()
         self.mode_hist.append(mode_type)
@@ -439,22 +439,22 @@ class UC2000Controller:
     @checksum.setter
     def checksum(self, check: bool):
         """
-        Set checksum protocol used for commands sent through the RS-232 protocol.  
+        Set checksum protocol used for commands sent through the RS-232 protocol.
 
-        Parameters  
-        ----------  
-        check : bool  
-            New checksum enable or disable option.  
+        Parameters
+        ----------
+        check : bool
+            New checksum enable or disable option.
 
-        Notes  
-        -----  
-        Only changes the message sent by Python and not the message sent by the  
-        UC-2000. That setting must be physcially changed on the controller.  
+        Notes
+        -----
+        Only changes the message sent by Python and not the message sent by the
+        UC-2000. That setting must be physcially changed on the controller.
 
-        Enabled checksum means messages are sent with a final checksum byte  
-        used to better handle errors with serial communication. Details on the  
-        checksum byte and other message formats can be found in the   
-        "Message.py" class.  
+        Enabled checksum means messages are sent with a final checksum byte
+        used to better handle errors with serial communication. Details on the
+        checksum byte and other message formats can be found in the
+        "Message.py" class.
         """
         self._checksum = check
         self.checksum_hist.append(check)
@@ -484,20 +484,20 @@ class UC2000Controller:
 
     def _pwm_percent_limits(self, limit_per: float):
         """
-        Limits input PWM percent to (0, 95/99) and converting '63%' to '62.5%'.  
+        Limits input PWM percent to (0, 95/99) and converting '63%' to '62.5%'.
 
-        If input is larger than current max PWM setting then reset to  
-        previous PWM percent.  
+        If input is larger than current max PWM setting then reset to
+        previous PWM percent.
 
-        Parameters  
-        ----------  
-        limit_per : float  
-            Input percent.  
+        Parameters
+        ----------
+        limit_per : float
+            Input percent.
 
-        Returns  
-        -------  
-        setpoint : float  
-            Actual valid setpoint.  
+        Returns
+        -------
+        setpoint : float
+            Actual valid setpoint.
         """
         # Check if the input percent is an int or float
         try:
@@ -520,7 +520,7 @@ class UC2000Controller:
         # Changes setpoint from 63 to 62.5% if checksum mode is disabled
         if setpoint in PERCENT_TRANSFORMS:
             setpoint = PERCENT_TRANSFORMS[setpoint]
-        
+
         # TODO: make this to logging instead?
         print("Setpoint is {0}%".format(setpoint))
         return setpoint
@@ -528,30 +528,30 @@ class UC2000Controller:
     @staticmethod
     def _shot_time_limits(shot: float):
         """
-        Limits input shot time to between 50ms to 10s.  
+        Limits input shot time to between 50ms to 10s.
 
-        If oustide the permitted range then the shot time is 50ms.  
+        If oustide the permitted range then the shot time is 50ms.
 
-        Parameters  
-        ----------  
-        shot : float  
-            Input shot time in ms.  
+        Parameters
+        ----------
+        shot : float
+            Input shot time in ms.
 
-        Returns  
-        -------  
-        float  
-            Valid shot time in ms.  
+        Returns
+        -------
+        float
+            Valid shot time in ms.
 
-        Notes  
-        -----  
-        Shot time is the time between the laser ON and OFF state, which can be  
-        either:  
-            - Turning the command signal between ON and OFF  
-            - Setting the PWM command signal percent to the minimum lase value  
-            - Switching the Gate signal between HIGH and LOW  
+        Notes
+        -----
+        Shot time is the time between the laser ON and OFF state, which can be
+        either:
+            - Turning the command signal between ON and OFF
+            - Setting the PWM command signal percent to the minimum lase value
+            - Switching the Gate signal between HIGH and LOW
 
-        Currently limited by communication speed between Python script and  
-        UC-2000 controller.  
+        Currently limited by communication speed between Python script and
+        UC-2000 controller.
         """
         try:
             shot = float(shot)
@@ -568,47 +568,47 @@ class UC2000Controller:
 
     def shoot(self, shot_percent: float, shot_time: float, num_shots: int):
         """
-        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.  
-        
-        Currently, the low laser percent is 3% as this doesn't affect the   
-        silica glass rods we are using, however, the option can be set in the   
-        script above.  
+        Shoots a laser shot by using PWM percent sequence of LOW, HIGH, LOW.
 
-        Parameters  
-        ----------  
-        shot_percent : float  
-            PWM laser percent.  
-        shot_time : float  
-            Time of shot in ms.  
-        num_shots : int  
-            Number of consecutive shots  
+        Currently, the low laser percent is 3% as this doesn't affect the
+        silica glass rods we are using, however, the option can be set in the
+        script above.
 
-        Returns  
-        -------  
-        dict  
-            Dict containing average interval time, total time, and any response   
-            from UC-2000  
-        
-        Notes  
-        -----  
-        Shot time can be guaranteed but time between shots might be less  
-        accurate.  
+        Parameters
+        ----------
+        shot_percent : float
+            PWM laser percent.
+        shot_time : float
+            Time of shot in ms.
+        num_shots : int
+            Number of consecutive shots
 
-        If shooting more than once, the time between shots is the same time as   
-        the shot time.  
+        Returns
+        -------
+        dict
+            Dict containing average interval time, total time, and any response
+            from UC-2000
 
-        Examples  
-        --------  
-        >>> laser = UC2000Controller(model=25)  
-        >>> with laser:  
-        ...     laser.shoot(10, 500, 2)  
+        Notes
+        -----
+        Shot time can be guaranteed but time between shots might be less
+        accurate.
 
-        Fires 2 shots for 500ms at 10% PWM duty cycle percent.  
+        If shooting more than once, the time between shots is the same time as
+        the shot time.
+
+        Examples
+        --------
+        >>> laser = UC2000Controller(model=25)
+        >>> with laser:
+        ...     laser.shoot(10, 500, 2)
+
+        Fires 2 shots for 500ms at 10% PWM duty cycle percent.
         """
         shot_time = self._shot_time_limits(shot_time)
         # Convert shot_time to microseconds
-    
-        # operations inside the interval.. Labjack interval ensures that the 
+
+        # operations inside the interval.. Labjack interval ensures that the
         # percent should be this for the selected shot_time
         def ops_inside(idx):
             if idx % 2 == 0:
@@ -616,22 +616,22 @@ class UC2000Controller:
             elif idx % 2 == 1:
                 self.percent = MIN_LASE_PERCENT
             return idx + 1, ""
-        
-        # operations outside the interval occur as soon as the host sends the 
+
+        # operations outside the interval occur as soon as the host sends the
         # command to Labjack
         def ops_outside(idx):
             self.percent = MIN_LASE_PERCENT
             return idx, ""
-        
+
         self.percent = MIN_LASE_PERCENT
         self.lase = True
         if self._open_labjack:
             # Interval_number is 2*num_shots - 1 because the operations outside
-            # end the shot so need odd number of iterations to ensure correct 
+            # end the shot so need odd number of iterations to ensure correct
             # number of shots
             self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
             interval_metrics = self._open_labjack.interval.start_interval(
-                operations_inside=ops_inside, 
+                operations_inside=ops_inside,
                 operations_outside=ops_outside
                 )
         else:
@@ -683,77 +683,77 @@ UC2000_COMMAND_BYTES = {
 
 class Message():
     """
-    REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial   
-    port.  
+    REMOTE Message sent to UC-2000 on REMOTE mode through RS-232 serial
+    port.
 
-    Parameters  
-    ----------  
-    command : {"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up",  
-                "mode", "lase", "percent", "status_request"}  
-        Command byte.  
-    data : float  
-        Data for PWM (or SET for closed loop) command.  
-    checksum : bool  
-        Checksum protocol mode.  
+    Parameters
+    ----------
+    command : {"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up",
+                "mode", "lase", "percent", "status_request"}
+        Command byte.
+    data : float
+        Data for PWM (or SET for closed loop) command.
+    checksum : bool
+        Checksum protocol mode.
 
-    Attributes  
-    ----------  
-    command  
-    data  
-    checksum  
-    message_bytes  
+    Attributes
+    ----------
+    command
+    data
+    checksum
+    message_bytes
 
-    Methods  
-    -------  
-    add_no_carry(*args)  
+    Methods
+    -------
+    add_no_carry(*args)
 
-    Notes  
-    -----  
-    There are 5 types of messages with different formats sent;  
-        Setup ("pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up")  
-        Mode ("mode")  
-        PWM (or closed loop SET) ("percent")  
-        Lase ("lase")  
-        Status Request  
+    Notes
+    -----
+    There are 5 types of messages with different formats sent;
+        Setup ("pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up")
+        Mode ("mode")
+        PWM (or closed loop SET) ("percent")
+        Lase ("lase")
+        Status Request
 
-    Setup Mode, and Lase commands have the byte sequence:  
-        STX<Command><Checksum>  
-        STX - start transmission byte.  
-        The checksum byte is the one's compliment of the Command byte.  
+    Setup Mode, and Lase commands have the byte sequence:
+        STX<Command><Checksum>
+        STX - start transmission byte.
+        The checksum byte is the one's compliment of the Command byte.
 
-    PWM (or SET) command byte sequence:  
-        STX<Command><Data Byte><Checksum>  
-        Data byte is the PWM percentage multipled by 2, converted into hex.  
-        The checksum byte is the adding without carry between command and  
-        data byte and then performing the one's compliment.  
+    PWM (or SET) command byte sequence:
+        STX<Command><Data Byte><Checksum>
+        Data byte is the PWM percentage multipled by 2, converted into hex.
+        The checksum byte is the adding without carry between command and
+        data byte and then performing the one's compliment.
 
-    Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK  
-    (0x3F). A NAK is sent if there is no valid command or checksum byte  
-    sent within 1s of STX byte or if the checksum byte is wrong.  
+    Response from Setup, Mode, Lase, and PWM is either ACK (0xAA) or NAK
+    (0x3F). A NAK is sent if there is no valid command or checksum byte
+    sent within 1s of STX byte or if the checksum byte is wrong.
 
-    Status Request:  
-        Single byte to tell UC-2000 to report it's status.  
-    
-    Response from Status Request is  
-        ACK<Status Byte1><Status Byte2><PWM Byte><Power Byte><Checksum>  
-        Refer to the UC-2000 manual for futher details about the contents  
-        of the response bytes. Currently not using so not as important.  
+    Status Request:
+        Single byte to tell UC-2000 to report it's status.
 
-    TODO: include parsing response byte from UC-2000  
+    Response from Status Request is
+        ACK<Status Byte1><Status Byte2><PWM Byte><Power Byte><Checksum>
+        Refer to the UC-2000 manual for futher details about the contents
+        of the response bytes. Currently not using so not as important.
 
-    Examples  
-    --------  
-    >>> message = Message("percent", 10, False)  
-    >>> message.message_bytes()  
-    [126, 127, 20]  
+    TODO: include parsing response byte from UC-2000
 
-    Create message for setting PWM percent to 10%.  
+    Examples
+    --------
+    >>> message = Message("percent", 10, False)
+    >>> message.message_bytes()
+    [126, 127, 20]
 
-    >>> message = Message("lase", True, False)  
-    >>> message.message_bytes()  
-    [126, 127, 117]  
+    Create message for setting PWM percent to 10%.
 
-    Create message for turning on command signal.  
+    >>> message = Message("lase", True, False)
+    >>> message.message_bytes()
+    [126, 127, 117]
+
+    Create message for turning on command signal.
     """
     def __init__(self, command: str, data, checksum: bool):
         """Inits a Message object."""
@@ -764,13 +764,13 @@ class Message():
     @property
     def message_bytes(self):
         """
-        Creates and returns REMOTE message byte sequence.  
+        Creates and returns REMOTE message byte sequence.
 
-        Returns  
-        -------  
-        message : list of int  
-            The message sequence containing the start byte, command byte,   
-            [data byte (optional)], and checksum (optional)  
+        Returns
+        -------
+        message : list of int
+            The message sequence containing the start byte, command byte,
+            [data byte (optional)], and checksum (optional)
         """
         if self.command in UC2000_COMMAND_BYTES.keys():
             command_byte = UC2000_COMMAND_BYTES[self.command][self.data]
@@ -778,7 +778,7 @@ class Message():
             message = [START_BYTE, command_byte]
 
             if self.checksum:
-                # without data, the checksum is the one's compliment of the 
+                # without data, the checksum is the one's compliment of the
                 # command byte
                 checksum_byte = ~command_byte & 0xff
                 message.append(checksum_byte)
@@ -790,7 +790,7 @@ class Message():
                 raise ValueError("Type of data is invalid. Needs to be float or int.")
 
             if self.checksum:
-                # with data, the checksum is the addition without carry of the 
+                # with data, the checksum is the addition without carry of the
                 # command and data byte and then one's complimented
                 checksum_byte = (
                     ~self.add_no_carry(SET_PERCENT_BYTE, self.data) & 0xff
@@ -808,54 +808,54 @@ class Message():
     @staticmethod
     def add_no_carry(*args):
         """
-        Addition without carry; addition is not carried to the next decimal up.  
+        Addition without carry; addition is not carried to the next decimal up.
 
-        Parameters  
-        ----------  
-        *args : iterable (not string)  
-            Iterate of ints to add without carry.  
+        Parameters
+        ----------
+        *args : iterable (not string)
+            Iterate of ints to add without carry.
 
-        Returns  
-        -------  
-        final_sum : int  
-            the result...  
+        Returns
+        -------
+        final_sum : int
+            the result...
 
-        Examples  
-        --------  
-        >>> add_no_carry(1, 1)  
-        2  
+        Examples
+        --------
+        >>> add_no_carry(1, 1)
+        2
 
-        >>> add_no_carry(1, 18)  
-        19  
+        >>> add_no_carry(1, 18)
+        19
 
-        >>> add_no_carry(1, 19)  
-        10  
+        >>> add_no_carry(1, 19)
+        10
 
-        The '10' is not carried over to the next decimal.  
+        The '10' is not carried over to the next decimal.
         """
         num_digits = []
-        
+
         for arg in args:
             num_digits.append(len(str(arg)))
-        
-        max_digits = max(num_digits) 
+
+        max_digits = max(num_digits)
         # list comprehension way
         # max_digits = max([len(str(arg)) for arg in args])
         final_sum = 0
-        
+
         for pwr in range(1, max_digits + 1): # iterate through ea decimal
             result_no_carry = 0
             for arg in args:
                 if len(str(arg)) >= pwr:
-                    # modulus sets the current decimal as the most significant 
+                    # modulus sets the current decimal as the most significant
                     # decimal
                     # floor div selects the most significant decimal
                     result_no_carry += arg % 10**pwr // 10**(pwr - 1)
-                    
+
             # list comprehension way
             # result_no_carry = sum([arg % 10**pwr // 10**(pwr - 1) for arg in args if len(str(arg)) >= pwr])
-            
+
             # final_sum = str(result_no_carry % 10) + final_sum
             final_sum += result_no_carry % 10
-            
+
         return int(final_sum)
