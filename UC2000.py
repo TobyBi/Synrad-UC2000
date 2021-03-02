@@ -40,35 +40,15 @@ class UC2000Controller:
     ----------
     model : {25, 50}
         SYNRAD 48 series laser model number, indicates the maximum
-        optical power output
+        optical power output.
     open_labjack : LabJack object
         A LabJack object to transmit messages to the UC-2000,
-        by default False.
+        by default ``False``.
 
     Attributes
     ----------
-    lase
-    percent
-    pwm_freq
-    gate_logic
-    max_pwm
-    lase_on_power_up
-    mode
-    checksum
-    max_power
-    power
-    model
-    open_labjack
     PARAMETER_NAME_hist : list
         Entire history of previous PARAMETER_NAME from instantiation.
-
-    Methods
-    -------
-    reset()
-        Reset all UC-2000 to default.
-    shoot(shot_percent, shot_time, num_shots)
-        Fires a number of shots of a given optical power percent for a
-        given time.
 
     Notes
     -----
@@ -84,7 +64,7 @@ class UC2000Controller:
     For further details please refer to:
     https://synrad.com/en/products/accessories/uc-2000
 
-    Messages are sent to the UC-2000 from the host via a DAQ, in this case
+    ``Messages`` are sent to the UC-2000 from the host via a DAQ, in this case
     a LabJack T4/T7 is used. However, any source that can produce RS-232
     asynchronous communication can be used. If a Labjack object or no other
     DAQ is provided then the UC-2000 only stores messages.
@@ -581,13 +561,13 @@ class UC2000Controller:
         shot_time : float
             Time of shot in ms.
         num_shots : int
-            Number of consecutive shots
+            Number of consecutive shots.
 
         Returns
         -------
         dict
             Dict containing average interval time, total time, and any response
-            from UC-2000
+            from UC-2000.
 
         Notes
         -----
@@ -688,24 +668,12 @@ class Message():
 
     Parameters
     ----------
-    command : {"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up",
-                "mode", "lase", "percent", "status_request"}
-        Command byte.
+    command : {"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up", "mode", "lase", "percent", "status_request"}
+        Command name, will be converted to command byte.
     data : float
         Data for PWM (or SET for closed loop) command.
     checksum : bool
         Checksum protocol mode.
-
-    Attributes
-    ----------
-    command
-    data
-    checksum
-    message_bytes
-
-    Methods
-    -------
-    add_no_carry(*args)
 
     Notes
     -----
@@ -756,10 +724,13 @@ class Message():
     Create message for turning on command signal.
     """
     def __init__(self, command: str, data, checksum: bool):
-        """Inits a Message object."""
+        """Inits a ``Message`` object."""
         self.command = command
+        """Command to perform"""
         self.checksum = checksum
+        """Checksum protocol mode."""
         self.data = data
+        """Data for PWM (or SET for closed loop) command."""
 
     @property
     def message_bytes(self):

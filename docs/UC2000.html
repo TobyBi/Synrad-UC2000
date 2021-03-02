@@ -23,7 +23,7 @@
 </header>
 <section id="section-intro">
 <h1 id="synrad-uc2000-controller">Synrad UC2000 Controller</h1>
-<p>Wrapper to communicate with a Synrad <a href="https://synrad.com/en/products/accessories/uc-2000">UC-2000 Universal Laser Controller</a> through the REMOTE port. A UC-2000 controller controls Synrad <a href="https://synrad.com/en/products/lasers/48-series">48 Series CO~2~ lasers</a>.</p>
+<p>Wrapper to communicate with a Synrad <a href="https://synrad.com/en/products/accessories/uc-2000">UC-2000 Universal Laser Controller</a> through the REMOTE port. A UC-2000 controller controls Synrad <a href="https://synrad.com/en/products/lasers/48-series">48 Series CO<sub>2</sub> lasers</a>.</p>
 <h2 id="requirements">Requirements</h2>
 <p>Requires at least Python 3.8.5 but no external libraries are required.</p>
 <p>Only written and tested with LabJack DAQ control and 48-2 and 48-5 lasers in mind.</p>
@@ -73,35 +73,15 @@ class UC2000Controller:
     ----------
     model : {25, 50}
         SYNRAD 48 series laser model number, indicates the maximum
-        optical power output
+        optical power output.
     open_labjack : LabJack object
         A LabJack object to transmit messages to the UC-2000,
-        by default False.
+        by default ``False``.
 
     Attributes
     ----------
-    lase
-    percent
-    pwm_freq
-    gate_logic
-    max_pwm
-    lase_on_power_up
-    mode
-    checksum
-    max_power
-    power
-    model
-    open_labjack
     PARAMETER_NAME_hist : list
         Entire history of previous PARAMETER_NAME from instantiation.
-
-    Methods
-    -------
-    reset()
-        Reset all UC-2000 to default.
-    shoot(shot_percent, shot_time, num_shots)
-        Fires a number of shots of a given optical power percent for a
-        given time.
 
     Notes
     -----
@@ -117,7 +97,7 @@ class UC2000Controller:
     For further details please refer to:
     https://synrad.com/en/products/accessories/uc-2000
 
-    Messages are sent to the UC-2000 from the host via a DAQ, in this case
+    ``Messages`` are sent to the UC-2000 from the host via a DAQ, in this case
     a LabJack T4/T7 is used. However, any source that can produce RS-232
     asynchronous communication can be used. If a Labjack object or no other
     DAQ is provided then the UC-2000 only stores messages.
@@ -614,13 +594,13 @@ class UC2000Controller:
         shot_time : float
             Time of shot in ms.
         num_shots : int
-            Number of consecutive shots
+            Number of consecutive shots.
 
         Returns
         -------
         dict
             Dict containing average interval time, total time, and any response
-            from UC-2000
+            from UC-2000.
 
         Notes
         -----
@@ -721,24 +701,12 @@ class Message():
 
     Parameters
     ----------
-    command : {&#34;pwm_freq&#34;, &#34;gate_logic&#34;, &#34;max_pwm&#34;, &#34;lase_on_power_up&#34;,
-                &#34;mode&#34;, &#34;lase&#34;, &#34;percent&#34;, &#34;status_request&#34;}
-        Command byte.
+    command : {&#34;pwm_freq&#34;, &#34;gate_logic&#34;, &#34;max_pwm&#34;, &#34;lase_on_power_up&#34;, &#34;mode&#34;, &#34;lase&#34;, &#34;percent&#34;, &#34;status_request&#34;}
+        Command name, will be converted to command byte.
     data : float
         Data for PWM (or SET for closed loop) command.
     checksum : bool
         Checksum protocol mode.
-
-    Attributes
-    ----------
-    command
-    data
-    checksum
-    message_bytes
-
-    Methods
-    -------
-    add_no_carry(*args)
 
     Notes
     -----
@@ -789,10 +757,13 @@ class Message():
     Create message for turning on command signal.
     &#34;&#34;&#34;
     def __init__(self, command: str, data, checksum: bool):
-        &#34;&#34;&#34;Inits a Message object.&#34;&#34;&#34;
+        &#34;&#34;&#34;Inits a ``Message`` object.&#34;&#34;&#34;
         self.command = command
+        &#34;&#34;&#34;Command to perform&#34;&#34;&#34;
         self.checksum = checksum
+        &#34;&#34;&#34;Checksum protocol mode.&#34;&#34;&#34;
         self.data = data
+        &#34;&#34;&#34;Data for PWM (or SET for closed loop) command.&#34;&#34;&#34;
 
     @property
     def message_bytes(self):
@@ -912,27 +883,13 @@ class Message():
 port.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>command</code></strong> :&ensp;<code>{"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up",</code></dt>
-<dd>"mode", "lase", "percent", "status_request"}
-Command byte.</dd>
+<dt><strong><code>command</code></strong> :&ensp;<code>{"pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up", "mode", "lase", "percent", "status_request"}</code></dt>
+<dd>Command name, will be converted to command byte.</dd>
 <dt><strong><code>data</code></strong> :&ensp;<code>float</code></dt>
 <dd>Data for PWM (or SET for closed loop) command.</dd>
 <dt><strong><code>checksum</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Checksum protocol mode.</dd>
 </dl>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>command</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>data</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>checksum</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>message_bytes</code></strong></dt>
-<dd>&nbsp;</dd>
-</dl>
-<h2 id="methods">Methods</h2>
-<p>add_no_carry(*args)</p>
 <h2 id="notes">Notes</h2>
 <p>There are 5 types of messages with different formats sent;
 Setup ("pwm_freq", "gate_logic", "max_pwm", "lase_on_power_up")
@@ -970,7 +927,7 @@ of the response bytes. Currently not using so not as important.</p>
 [126, 127, 117]
 </code></pre>
 <p>Create message for turning on command signal.</p>
-<p>Inits a Message object.</p></div>
+<p>Inits a <code><a title="UC2000.Message" href="#UC2000.Message">Message</a></code> object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -982,24 +939,12 @@ of the response bytes. Currently not using so not as important.</p>
 
     Parameters
     ----------
-    command : {&#34;pwm_freq&#34;, &#34;gate_logic&#34;, &#34;max_pwm&#34;, &#34;lase_on_power_up&#34;,
-                &#34;mode&#34;, &#34;lase&#34;, &#34;percent&#34;, &#34;status_request&#34;}
-        Command byte.
+    command : {&#34;pwm_freq&#34;, &#34;gate_logic&#34;, &#34;max_pwm&#34;, &#34;lase_on_power_up&#34;, &#34;mode&#34;, &#34;lase&#34;, &#34;percent&#34;, &#34;status_request&#34;}
+        Command name, will be converted to command byte.
     data : float
         Data for PWM (or SET for closed loop) command.
     checksum : bool
         Checksum protocol mode.
-
-    Attributes
-    ----------
-    command
-    data
-    checksum
-    message_bytes
-
-    Methods
-    -------
-    add_no_carry(*args)
 
     Notes
     -----
@@ -1050,10 +995,13 @@ of the response bytes. Currently not using so not as important.</p>
     Create message for turning on command signal.
     &#34;&#34;&#34;
     def __init__(self, command: str, data, checksum: bool):
-        &#34;&#34;&#34;Inits a Message object.&#34;&#34;&#34;
+        &#34;&#34;&#34;Inits a ``Message`` object.&#34;&#34;&#34;
         self.command = command
+        &#34;&#34;&#34;Command to perform&#34;&#34;&#34;
         self.checksum = checksum
+        &#34;&#34;&#34;Checksum protocol mode.&#34;&#34;&#34;
         self.data = data
+        &#34;&#34;&#34;Data for PWM (or SET for closed loop) command.&#34;&#34;&#34;
 
     @property
     def message_bytes(self):
@@ -1245,6 +1193,18 @@ def add_no_carry(*args):
 </dl>
 <h3>Instance variables</h3>
 <dl>
+<dt id="UC2000.Message.checksum"><code class="name">var <span class="ident">checksum</span></code></dt>
+<dd>
+<div class="desc"><p>Checksum protocol mode.</p></div>
+</dd>
+<dt id="UC2000.Message.command"><code class="name">var <span class="ident">command</span></code></dt>
+<dd>
+<div class="desc"><p>Command to perform</p></div>
+</dd>
+<dt id="UC2000.Message.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dd>
+<div class="desc"><p>Data for PWM (or SET for closed loop) command.</p></div>
+</dd>
 <dt id="UC2000.Message.message_bytes"><code class="name">var <span class="ident">message_bytes</span></code></dt>
 <dd>
 <div class="desc"><p>Creates and returns REMOTE message byte sequence.</p>
@@ -1317,46 +1277,16 @@ settings are facilitated through the Serial RS-232 protocol and port.</p>
 <dl>
 <dt><strong><code>model</code></strong> :&ensp;<code>{25, 50}</code></dt>
 <dd>SYNRAD 48 series laser model number, indicates the maximum
-optical power output</dd>
+optical power output.</dd>
 <dt><strong><code>open_labjack</code></strong> :&ensp;<code>LabJack object</code></dt>
 <dd>A LabJack object to transmit messages to the UC-2000,
-by default False.</dd>
+by default <code>False</code>.</dd>
 </dl>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>lase</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>percent</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>pwm_freq</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>gate_logic</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>max_pwm</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>lase_on_power_up</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>mode</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>checksum</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>max_power</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>power</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>model</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>open_labjack</code></strong></dt>
-<dd>&nbsp;</dd>
 <dt><strong><code>PARAMETER_NAME_hist</code></strong> :&ensp;<code>list</code></dt>
 <dd>Entire history of previous PARAMETER_NAME from instantiation.</dd>
 </dl>
-<h2 id="methods">Methods</h2>
-<p>reset()
-Reset all UC-2000 to default.
-shoot(shot_percent, shot_time, num_shots)
-Fires a number of shots of a given optical power percent for a
-given time.</p>
 <h2 id="notes">Notes</h2>
 <p>Pins 2, 3, and 5 of a serial port are used for receive, transmit, and
 ground respectively.
@@ -1373,7 +1303,7 @@ Flow control
 None</p>
 <p>For further details please refer to:
 <a href="https://synrad.com/en/products/accessories/uc-2000">https://synrad.com/en/products/accessories/uc-2000</a></p>
-<p>Messages are sent to the UC-2000 from the host via a DAQ, in this case
+<p><code>Messages</code> are sent to the UC-2000 from the host via a DAQ, in this case
 a LabJack T4/T7 is used. However, any source that can produce RS-232
 asynchronous communication can be used. If a Labjack object or no other
 DAQ is provided then the UC-2000 only stores messages.</p>
@@ -1432,35 +1362,15 @@ command - maybe use to check option on laser</p>
     ----------
     model : {25, 50}
         SYNRAD 48 series laser model number, indicates the maximum
-        optical power output
+        optical power output.
     open_labjack : LabJack object
         A LabJack object to transmit messages to the UC-2000,
-        by default False.
+        by default ``False``.
 
     Attributes
     ----------
-    lase
-    percent
-    pwm_freq
-    gate_logic
-    max_pwm
-    lase_on_power_up
-    mode
-    checksum
-    max_power
-    power
-    model
-    open_labjack
     PARAMETER_NAME_hist : list
         Entire history of previous PARAMETER_NAME from instantiation.
-
-    Methods
-    -------
-    reset()
-        Reset all UC-2000 to default.
-    shoot(shot_percent, shot_time, num_shots)
-        Fires a number of shots of a given optical power percent for a
-        given time.
 
     Notes
     -----
@@ -1476,7 +1386,7 @@ command - maybe use to check option on laser</p>
     For further details please refer to:
     https://synrad.com/en/products/accessories/uc-2000
 
-    Messages are sent to the UC-2000 from the host via a DAQ, in this case
+    ``Messages`` are sent to the UC-2000 from the host via a DAQ, in this case
     a LabJack T4/T7 is used. However, any source that can produce RS-232
     asynchronous communication can be used. If a Labjack object or no other
     DAQ is provided then the UC-2000 only stores messages.
@@ -1973,13 +1883,13 @@ command - maybe use to check option on laser</p>
         shot_time : float
             Time of shot in ms.
         num_shots : int
-            Number of consecutive shots
+            Number of consecutive shots.
 
         Returns
         -------
         dict
             Dict containing average interval time, total time, and any response
-            from UC-2000
+            from UC-2000.
 
         Notes
         -----
@@ -2206,13 +2116,13 @@ script above.</p>
 <dt><strong><code>shot_time</code></strong> :&ensp;<code>float</code></dt>
 <dd>Time of shot in ms.</dd>
 <dt><strong><code>num_shots</code></strong> :&ensp;<code>int</code></dt>
-<dd>Number of consecutive shots</dd>
+<dd>Number of consecutive shots.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>dict</code></dt>
 <dd>Dict containing average interval time, total time, and any response
-from UC-2000</dd>
+from UC-2000.</dd>
 </dl>
 <h2 id="notes">Notes</h2>
 <p>Shot time can be guaranteed but time between shots might be less
@@ -2244,13 +2154,13 @@ the shot time.</p>
     shot_time : float
         Time of shot in ms.
     num_shots : int
-        Number of consecutive shots
+        Number of consecutive shots.
 
     Returns
     -------
     dict
         Dict containing average interval time, total time, and any response
-        from UC-2000
+        from UC-2000.
 
     Notes
     -----
@@ -2327,6 +2237,9 @@ the shot time.</p>
 <h4><code><a title="UC2000.Message" href="#UC2000.Message">Message</a></code></h4>
 <ul class="">
 <li><code><a title="UC2000.Message.add_no_carry" href="#UC2000.Message.add_no_carry">add_no_carry</a></code></li>
+<li><code><a title="UC2000.Message.checksum" href="#UC2000.Message.checksum">checksum</a></code></li>
+<li><code><a title="UC2000.Message.command" href="#UC2000.Message.command">command</a></code></li>
+<li><code><a title="UC2000.Message.data" href="#UC2000.Message.data">data</a></code></li>
 <li><code><a title="UC2000.Message.message_bytes" href="#UC2000.Message.message_bytes">message_bytes</a></code></li>
 </ul>
 </li>
