@@ -501,8 +501,8 @@ class UC2000Controller:
 
         # FIXME: only change this for if checksum if False
         # Changes setpoint from 63 to 62.5% if checksum mode is disabled
-        if setpoint in PERCENT_TRANSFORMS:
-            setpoint = PERCENT_TRANSFORMS[setpoint]
+        if setpoint in _PERCENT_TRANSFORMS:
+            setpoint = _PERCENT_TRANSFORMS[setpoint]
 
         # TODO: make this to logging instead?
         print("Setpoint is {0}%".format(setpoint))
@@ -613,10 +613,11 @@ class UC2000Controller:
             # end the shot so need odd number of iterations to ensure correct
             # number of shots
             self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-            interval_metrics = self._open_labjack.interval.start_interval(
-                operations_inside=ops_inside,
-                operations_outside=ops_outside
-                )
+            with self._open_labjack:
+                interval_metrics = self._open_labjack.interval.start_interval(
+                    operations_inside=ops_inside,
+                    operations_outside=ops_outside
+                    )
         else:
             interval_metrics = {}
         self.percent = MIN_LASE_PERCENT
