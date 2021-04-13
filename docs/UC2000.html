@@ -25,8 +25,17 @@
 <h1 id="synrad-uc2000-controller">Synrad UC2000 Controller</h1>
 <p>Wrapper to communicate with a Synrad <a href="https://synrad.com/en/products/accessories/uc-2000">UC-2000 Universal Laser Controller</a> through the REMOTE port. A UC-2000 controller controls Synrad <a href="https://synrad.com/en/products/lasers/48-series">48 Series CO<sub>2</sub> lasers</a>.</p>
 <h2 id="requirements">Requirements</h2>
-<p>Requires at least Python 3.8.5 but no external libraries are required.</p>
+<ul>
+<li>Python 3.8.5+</li>
+<li>[OPTIONAL] If using <code>synrad-uc2000</code> with a LabJack, then the <code>labjack-daq</code> is required. Please visit <a href="https://github.com/TobyBi/labjack-daq">https://github.com/TobyBi/labjack-daq</a> for further installation guidelines.</li>
+</ul>
 <p>Only written and tested with LabJack DAQ control and 48-2 and 48-5 lasers in mind.</p>
+<h2 id="installation">Installation</h2>
+<p>To install simply clone the git directory using the following commands:</p>
+<pre><code class="language-bash">git clone https://github.com/TobyBi/synrad-uc2000
+</code></pre>
+<pre><code class="language-bash">pip install ./synrad-uc2000
+</code></pre>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -534,8 +543,8 @@ class UC2000Controller:
 
         # FIXME: only change this for if checksum if False
         # Changes setpoint from 63 to 62.5% if checksum mode is disabled
-        if setpoint in PERCENT_TRANSFORMS:
-            setpoint = PERCENT_TRANSFORMS[setpoint]
+        if setpoint in _PERCENT_TRANSFORMS:
+            setpoint = _PERCENT_TRANSFORMS[setpoint]
 
         # TODO: make this to logging instead?
         print(&#34;Setpoint is {0}%&#34;.format(setpoint))
@@ -646,10 +655,11 @@ class UC2000Controller:
             # end the shot so need odd number of iterations to ensure correct
             # number of shots
             self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-            interval_metrics = self._open_labjack.interval.start_interval(
-                operations_inside=ops_inside,
-                operations_outside=ops_outside
-                )
+            with self._open_labjack:
+                interval_metrics = self._open_labjack.interval.start_interval(
+                    operations_inside=ops_inside,
+                    operations_outside=ops_outside
+                    )
         else:
             interval_metrics = {}
         self.percent = MIN_LASE_PERCENT
@@ -1867,8 +1877,8 @@ command - maybe use to check option on laser</p>
 
         # FIXME: only change this for if checksum if False
         # Changes setpoint from 63 to 62.5% if checksum mode is disabled
-        if setpoint in PERCENT_TRANSFORMS:
-            setpoint = PERCENT_TRANSFORMS[setpoint]
+        if setpoint in _PERCENT_TRANSFORMS:
+            setpoint = _PERCENT_TRANSFORMS[setpoint]
 
         # TODO: make this to logging instead?
         print(&#34;Setpoint is {0}%&#34;.format(setpoint))
@@ -1979,10 +1989,11 @@ command - maybe use to check option on laser</p>
             # end the shot so need odd number of iterations to ensure correct
             # number of shots
             self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-            interval_metrics = self._open_labjack.interval.start_interval(
-                operations_inside=ops_inside,
-                operations_outside=ops_outside
-                )
+            with self._open_labjack:
+                interval_metrics = self._open_labjack.interval.start_interval(
+                    operations_inside=ops_inside,
+                    operations_outside=ops_outside
+                    )
         else:
             interval_metrics = {}
         self.percent = MIN_LASE_PERCENT
@@ -2257,10 +2268,11 @@ the shot time.</p>
         # end the shot so need odd number of iterations to ensure correct
         # number of shots
         self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-        interval_metrics = self._open_labjack.interval.start_interval(
-            operations_inside=ops_inside,
-            operations_outside=ops_outside
-            )
+        with self._open_labjack:
+            interval_metrics = self._open_labjack.interval.start_interval(
+                operations_inside=ops_inside,
+                operations_outside=ops_outside
+                )
     else:
         interval_metrics = {}
     self.percent = MIN_LASE_PERCENT
@@ -2280,6 +2292,7 @@ the shot time.</p>
 <ul>
 <li><a href="#synrad-uc2000-controller">Synrad UC2000 Controller</a><ul>
 <li><a href="#requirements">Requirements</a></li>
+<li><a href="#installation">Installation</a></li>
 </ul>
 </li>
 </ul>
