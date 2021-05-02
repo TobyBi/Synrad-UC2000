@@ -3,7 +3,7 @@
 Wrapper to communicate with a Synrad [UC-2000 Universal Laser Controller](https://synrad.com/en/products/accessories/uc-2000) through the REMOTE port. A UC-2000 controller controls Synrad [48 Series CO<sub>2</sub> lasers](https://synrad.com/en/products/lasers/48-series).
 
 ## Requirements
-- Python 3.8.5+
+- Python >= 3.8.5
 - [OPTIONAL] If using `Synrad-UC2000` with a LabJack, then the `labjack-daq` is required. Please visit the [repository](https://github.com/TobyBi/LabJack-DAQ) for further installation guidelines.
 
 Only written and tested with LabJack DAQ control and 48-2 and 48-5 lasers in mind.
