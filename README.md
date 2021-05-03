@@ -5,14 +5,8 @@ Wrapper to communicate with a Synrad [UC-2000 Universal Laser Controller](https:
 
 
 ## Requirements
-<<<<<<< HEAD
-
-- Python 3.8.5+
-- [OPTIONAL] If using `Synrad-UC2000` with a LabJack, then the `labjack-daq` is required. Please visit https://github.com/TobyBi/labJack-daq for further installation guidelines.
-=======
 - Python >= 3.8.5
-- [OPTIONAL] If using `Synrad-UC2000` with a LabJack, then the `LabJack-DAQ` is required. Please visit the [repository](https://github.com/TobyBi/LabJack-DAQ) for further installation guidelines.
->>>>>>> 6332566803002edbb6f7ab47392438dfeece6f2b
+- [OPTIONAL] If using `Synrad-UC2000` with a LabJack, then the `LabJack-DAQ` module is required. Please visit the [repository](https://github.com/TobyBi/LabJack-DAQ) for further installation guidelines.
 
 Only written and tested with LabJack DAQ control and 48-2 and 48-5 lasers in mind.
 
@@ -24,9 +18,9 @@ To install simply clone the git directory using the following commands:
 
 ```bash
 git clone https://github.com/TobyBi/Synrad-UC2000
-cd ./Synrad-UC2000
-pip install .
 ```
+
+and then move the file `uc2000.py` to your program location.
 
 
 
