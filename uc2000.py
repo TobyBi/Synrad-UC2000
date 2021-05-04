@@ -28,7 +28,7 @@ class UC2000Controller:
     model : {25, 50}
         SYNRAD 48 series laser model number, indicates the maximum
         optical power output.
-    open_labjack : LabJack object
+    daq : LabJack object
         A LabJack object to transmit messages to the UC-2000,
         by default ``False``.
 
@@ -116,11 +116,11 @@ class UC2000Controller:
     # TODO: update RC params style?
     # TODO: set defaults list into controller as argument for changable settings
 
-    def __init__(self, model: int, open_labjack=False):
+    def __init__(self, model: int, daq=False):
         """Inits a UC2000 object."""
         self.model = model
 
-        self._open_labjack = open_labjack
+        self._daq = daq
 
         self.pwm_freq_hist = [None]
         self.gate_logic_hist = [None]
@@ -142,18 +142,17 @@ class UC2000Controller:
         return self
 
     def __exit__(self, exc_type, exc_value, exc_tb):
+        # Always turn laser off
+        self.percent = 0
+        self.lase = False
+
         if exc_type is KeyboardInterrupt:
             print("Laser process stopped by user")
-            self.percent = 0
-            self.lase = False
             # returning False because we want to allow nested with statements
             # above the stack to also use their __exit__ which turns the laser
             # off and low set percent.
             return False
 
-        # turn it down anyways
-        self.percent = 0
-        self.lase = False
         return exc_type is None
 
     @property
@@ -188,9 +187,9 @@ class UC2000Controller:
         self.lase_hist.append(state)
 
         # if the new option is the same as before don't send changes to labjack
-        if (self.lase_hist[-2] != state) and self._open_labjack:
+        if (self.lase_hist[-2] != state) and self._daq:
             msg = Message("lase", state, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def percent(self):
@@ -225,9 +224,9 @@ class UC2000Controller:
         self._percent = per
         self.percent_hist.append(per)
 
-        if self.percent_hist[-2] != per and self._open_labjack:
+        if self.percent_hist[-2] != per and self._daq:
             msg = Message("percent", per, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def pwm_freq(self):
@@ -257,9 +256,9 @@ class UC2000Controller:
         self._pwm_freq = freq
         self.pwm_freq_hist.append(freq)
 
-        if self.pwm_freq_hist[-2] != freq and self._open_labjack:
+        if self.pwm_freq_hist[-2] != freq and self._daq:
             msg = Message("pwm_freq", freq, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def gate_logic(self):
@@ -300,9 +299,9 @@ class UC2000Controller:
         self._gate_logic = pull
         self.gate_logic_hist.append(pull)
 
-        if self.gate_logic_hist[-2] != pull and self._open_labjack:
+        if self.gate_logic_hist[-2] != pull and self._daq:
             msg = Message("gate_logic", pull, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def max_pwm(self):
@@ -331,9 +330,9 @@ class UC2000Controller:
         self._max_pwm = per
         self.max_pwm_hist.append(per)
 
-        if self.max_pwm_hist[-2] != per and self._open_labjack:
+        if self.max_pwm_hist[-2] != per and self._daq:
             msg = Message("max_pwm", per, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def lase_on_power_up(self):
@@ -362,9 +361,9 @@ class UC2000Controller:
         self._lase_on_power_up = pwr
         self.lase_on_power_up_hist.append(pwr)
 
-        if self.lase_on_power_up_hist[-2] != pwr and self._open_labjack:
+        if self.lase_on_power_up_hist[-2] != pwr and self._daq:
             msg = Message("lase_on_power_up", pwr, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def mode(self):
@@ -410,9 +409,9 @@ class UC2000Controller:
         self._mode = mode_type.lower()
         self.mode_hist.append(mode_type)
 
-        if self.mode_hist[-2] != mode_type and self._open_labjack:
+        if self.mode_hist[-2] != mode_type and self._daq:
             msg = Message("mode", mode_type, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def checksum(self):
@@ -605,25 +604,27 @@ class UC2000Controller:
         def ops_outside(idx):
             self.percent = MIN_LASE_PERCENT
             return idx, ""
-
-        self.percent = MIN_LASE_PERCENT
-        self.lase = True
-        if self._open_labjack:
-            # Interval_number is 2*num_shots - 1 because the operations outside
-            # end the shot so need odd number of iterations to ensure correct
-            # number of shots
-            self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-            with self._open_labjack:
-                interval_metrics = self._open_labjack.interval.start_interval(
+        
+        # With statement turns off the laser with KB interrupt even without 
+        # using "with" outside the class. Still will wait until interval is finished
+        with self:
+            self.percent = MIN_LASE_PERCENT
+            self.lase = True
+            if self._daq:
+                # Interval_number is 2*num_shots - 1 because the operations outside
+                # end the shot so need odd number of iterations to ensure correct
+                # number of shots
+                self._daq.add_interval(int(shot_time*1e3), 2*num_shots - 1)
+                interval_metrics = self._daq.interval.start_interval(
                     operations_inside=ops_inside,
                     operations_outside=ops_outside
                     )
-        else:
-            interval_metrics = {}
-        self.percent = MIN_LASE_PERCENT
-        self.lase = False
-        self.shot_time_hist += [shot_time]*num_shots
-        return interval_metrics
+            else:
+                interval_metrics = {}
+            self.percent = MIN_LASE_PERCENT
+            self.lase = False
+            self.shot_time_hist += [shot_time]*num_shots
+            return interval_metrics
 
 
 # =============================================================================
