@@ -51,7 +51,7 @@ class UC2000Controller:
     For further details please refer to:
     https://synrad.com/en/products/accessories/uc-2000
 
-    ``Messages`` are sent to the UC-2000 from the host via a DAQ, in this case
+    `uc2000.Message`s are sent to the UC-2000 from the host via a DAQ, in this case
     a LabJack T4/T7 is used. However, any source that can produce RS-232
     asynchronous communication can be used. If a Labjack object or no other
     DAQ is provided then the UC-2000 only stores messages.
@@ -730,7 +730,7 @@ class Message():
     _set_percent_byte = 0x7f
 
     def __init__(self, command: str, data, checksum: bool):
-        """Inits a ``Message`` object."""
+        """Inits a Message object."""
         self.command = command
         """Command to perform"""
         self.checksum = checksum

@@ -26,16 +26,20 @@
 <p>Wrapper to communicate with a Synrad <a href="https://synrad.com/en/products/accessories/uc-2000">UC-2000 Universal Laser Controller</a> through the REMOTE port. A UC-2000 controller controls Synrad <a href="https://synrad.com/en/products/lasers/48-series">48 Series CO<sub>2</sub> lasers</a>.</p>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>Python 3.8.5+</li>
-<li>[OPTIONAL] If using <code>Synrad-UC2000</code> with a LabJack, then the <code>labjack-daq</code> is required. Please visit <a href="https://github.com/TobyBi/labJack-daq">https://github.com/TobyBi/labJack-daq</a> for further installation guidelines.</li>
+<li>Python &gt;= 3.8.5</li>
+<li>[OPTIONAL] If using <code>Synrad-UC2000</code> with a LabJack, then the <code>LabJack-DAQ</code> module is required. Please visit the <a href="https://github.com/TobyBi/LabJack-DAQ">repository</a> for further installation guidelines.</li>
 </ul>
 <p>Only written and tested with LabJack DAQ control and 48-2 and 48-5 lasers in mind.</p>
 <h2 id="installation">Installation</h2>
 <p>To install simply clone the git directory using the following commands:</p>
 <pre><code class="language-bash">git clone https://github.com/TobyBi/Synrad-UC2000
-cd ./Synrad-UC2000
-pip install .
 </code></pre>
+<p>and then move the file <code>uc2000.py</code> to your program location.</p>
+<h2 id="todo">TODO</h2>
+<ul>
+<li>Lua scripting for better timings</li>
+<li>Default to PySerial without any DAQ</li>
+</ul>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -93,7 +97,7 @@ class UC2000Controller:
     For further details please refer to:
     https://synrad.com/en/products/accessories/uc-2000
 
-    ``Messages`` are sent to the UC-2000 from the host via a DAQ, in this case
+    `uc2000.Message`s are sent to the UC-2000 from the host via a DAQ, in this case
     a LabJack T4/T7 is used. However, any source that can produce RS-232
     asynchronous communication can be used. If a Labjack object or no other
     DAQ is provided then the UC-2000 only stores messages.
@@ -772,7 +776,7 @@ class Message():
     _set_percent_byte = 0x7f
 
     def __init__(self, command: str, data, checksum: bool):
-        &#34;&#34;&#34;Inits a ``Message`` object.&#34;&#34;&#34;
+        &#34;&#34;&#34;Inits a Message object.&#34;&#34;&#34;
         self.command = command
         &#34;&#34;&#34;Command to perform&#34;&#34;&#34;
         self.checksum = checksum
@@ -957,7 +961,7 @@ of the response bytes. Currently not using so not as important.</p>
 [126, 127, 117]
 </code></pre>
 <p>Create message for turning on command signal.</p>
-<p>Inits a <code><a title="uc2000.Message" href="#uc2000.Message">Message</a></code> object.</p></div>
+<p>Inits a Message object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1030,7 +1034,7 @@ of the response bytes. Currently not using so not as important.</p>
     _set_percent_byte = 0x7f
 
     def __init__(self, command: str, data, checksum: bool):
-        &#34;&#34;&#34;Inits a ``Message`` object.&#34;&#34;&#34;
+        &#34;&#34;&#34;Inits a Message object.&#34;&#34;&#34;
         self.command = command
         &#34;&#34;&#34;Command to perform&#34;&#34;&#34;
         self.checksum = checksum
@@ -1344,7 +1348,7 @@ Flow control
 None</p>
 <p>For further details please refer to:
 <a href="https://synrad.com/en/products/accessories/uc-2000">https://synrad.com/en/products/accessories/uc-2000</a></p>
-<p><code>Messages</code> are sent to the UC-2000 from the host via a DAQ, in this case
+<p><code><a title="uc2000.Message" href="#uc2000.Message">Message</a></code>s are sent to the UC-2000 from the host via a DAQ, in this case
 a LabJack T4/T7 is used. However, any source that can produce RS-232
 asynchronous communication can be used. If a Labjack object or no other
 DAQ is provided then the UC-2000 only stores messages.</p>
@@ -1427,7 +1431,7 @@ command - maybe use to check option on laser</p>
     For further details please refer to:
     https://synrad.com/en/products/accessories/uc-2000
 
-    ``Messages`` are sent to the UC-2000 from the host via a DAQ, in this case
+    `uc2000.Message`s are sent to the UC-2000 from the host via a DAQ, in this case
     a LabJack T4/T7 is used. However, any source that can produce RS-232
     asynchronous communication can be used. If a Labjack object or no other
     DAQ is provided then the UC-2000 only stores messages.
@@ -2293,6 +2297,7 @@ the shot time.</p>
 <li><a href="#synrad-uc2000-controller">Synrad UC2000 Controller</a><ul>
 <li><a href="#requirements">Requirements</a></li>
 <li><a href="#installation">Installation</a></li>
+<li><a href="#todo">TODO</a></li>
 </ul>
 </li>
 </ul>
