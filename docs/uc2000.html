@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.2" />
 <title>uc2000 API documentation</title>
-<meta name="description" content="Synrad UC2000 Controller …" />
+<meta name="description" content="Synrad-UC2000 …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,7 +22,7 @@
 <h1 class="title">Module <code>uc2000</code></h1>
 </header>
 <section id="section-intro">
-<h1 id="synrad-uc2000-controller">Synrad UC2000 Controller</h1>
+<h1 id="synrad-uc2000">Synrad-UC2000</h1>
 <p>Wrapper to communicate with a Synrad <a href="https://synrad.com/en/products/accessories/uc-2000">UC-2000 Universal Laser Controller</a> through the REMOTE port. A UC-2000 controller controls Synrad <a href="https://synrad.com/en/products/lasers/48-series">48 Series CO<sub>2</sub> lasers</a>.</p>
 <h2 id="requirements">Requirements</h2>
 <ul>
@@ -34,7 +34,32 @@
 <p>To install simply clone the git directory using the following commands:</p>
 <pre><code class="language-bash">git clone https://github.com/TobyBi/Synrad-UC2000
 </code></pre>
-<p>and then move the file <code>uc2000.py</code> to your program location.</p>
+<p>Move the file <code><a title="uc2000" href="#uc2000">uc2000</a></code> to your program location and import it.</p>
+<h2 id="usage">Usage</h2>
+<p>The main points to interface with the laser and controller are</p>
+<ul>
+<li><code>percent</code> for the % of the PWM width,</li>
+<li><code>lase</code> for the lasing state of the laser, and</li>
+<li><code>shoot</code> which fires a chosen number of shots at a given <code>percent</code> and <code>shot_time</code> .</li>
+</ul>
+<p>The less frequently changed settings of the laser and controller are:</p>
+<ul>
+<li>PWM frequency,</li>
+<li>gate logic,</li>
+<li>max PWM percent,</li>
+<li>controller mode, and</li>
+<li>checksum.</li>
+</ul>
+<p>If you are using <code>lase</code> and <code>percent</code> functions with any other modules that include premature termination of the program, make sure to execute the commands within a <a href="https://docs.python.org/3/library/contextlib.html">context manager</a> e.g.</p>
+<pre><code class="language-python">laser = UC2000Controller(25)
+with laser:
+    laser.percent = 10
+    laser.lase = True
+
+    # Program is blocked
+</code></pre>
+<p>If the program is terminated using a <code>KeyboardInterrupt</code>, then the laser will always turn off. This is featured directly in the <code>shoot</code> function so using the context manager is not required there.</p>
+<p>Refer to the <a href="https://tobybi.github.io/Synrad-UC2000/uc2000.html">documentation</a> for more details.</p>
 <h2 id="todo">TODO</h2>
 <ul>
 <li>Lua scripting for better timings</li>
@@ -74,7 +99,7 @@ class UC2000Controller:
     model : {25, 50}
         SYNRAD 48 series laser model number, indicates the maximum
         optical power output.
-    open_labjack : LabJack object
+    daq : LabJack object
         A LabJack object to transmit messages to the UC-2000,
         by default ``False``.
 
@@ -162,11 +187,11 @@ class UC2000Controller:
     # TODO: update RC params style?
     # TODO: set defaults list into controller as argument for changable settings
 
-    def __init__(self, model: int, open_labjack=False):
+    def __init__(self, model: int, daq=False):
         &#34;&#34;&#34;Inits a UC2000 object.&#34;&#34;&#34;
         self.model = model
 
-        self._open_labjack = open_labjack
+        self._daq = daq
 
         self.pwm_freq_hist = [None]
         self.gate_logic_hist = [None]
@@ -188,18 +213,17 @@ class UC2000Controller:
         return self
 
     def __exit__(self, exc_type, exc_value, exc_tb):
+        # Always turn laser off
+        self.percent = 0
+        self.lase = False
+
         if exc_type is KeyboardInterrupt:
             print(&#34;Laser process stopped by user&#34;)
-            self.percent = 0
-            self.lase = False
             # returning False because we want to allow nested with statements
             # above the stack to also use their __exit__ which turns the laser
             # off and low set percent.
             return False
 
-        # turn it down anyways
-        self.percent = 0
-        self.lase = False
         return exc_type is None
 
     @property
@@ -234,9 +258,9 @@ class UC2000Controller:
         self.lase_hist.append(state)
 
         # if the new option is the same as before don&#39;t send changes to labjack
-        if (self.lase_hist[-2] != state) and self._open_labjack:
+        if (self.lase_hist[-2] != state) and self._daq:
             msg = Message(&#34;lase&#34;, state, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def percent(self):
@@ -271,9 +295,9 @@ class UC2000Controller:
         self._percent = per
         self.percent_hist.append(per)
 
-        if self.percent_hist[-2] != per and self._open_labjack:
+        if self.percent_hist[-2] != per and self._daq:
             msg = Message(&#34;percent&#34;, per, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def pwm_freq(self):
@@ -303,9 +327,9 @@ class UC2000Controller:
         self._pwm_freq = freq
         self.pwm_freq_hist.append(freq)
 
-        if self.pwm_freq_hist[-2] != freq and self._open_labjack:
+        if self.pwm_freq_hist[-2] != freq and self._daq:
             msg = Message(&#34;pwm_freq&#34;, freq, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def gate_logic(self):
@@ -346,9 +370,9 @@ class UC2000Controller:
         self._gate_logic = pull
         self.gate_logic_hist.append(pull)
 
-        if self.gate_logic_hist[-2] != pull and self._open_labjack:
+        if self.gate_logic_hist[-2] != pull and self._daq:
             msg = Message(&#34;gate_logic&#34;, pull, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def max_pwm(self):
@@ -377,9 +401,9 @@ class UC2000Controller:
         self._max_pwm = per
         self.max_pwm_hist.append(per)
 
-        if self.max_pwm_hist[-2] != per and self._open_labjack:
+        if self.max_pwm_hist[-2] != per and self._daq:
             msg = Message(&#34;max_pwm&#34;, per, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def lase_on_power_up(self):
@@ -408,9 +432,9 @@ class UC2000Controller:
         self._lase_on_power_up = pwr
         self.lase_on_power_up_hist.append(pwr)
 
-        if self.lase_on_power_up_hist[-2] != pwr and self._open_labjack:
+        if self.lase_on_power_up_hist[-2] != pwr and self._daq:
             msg = Message(&#34;lase_on_power_up&#34;, pwr, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def mode(self):
@@ -456,9 +480,9 @@ class UC2000Controller:
         self._mode = mode_type.lower()
         self.mode_hist.append(mode_type)
 
-        if self.mode_hist[-2] != mode_type and self._open_labjack:
+        if self.mode_hist[-2] != mode_type and self._daq:
             msg = Message(&#34;mode&#34;, mode_type, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def checksum(self):
@@ -651,25 +675,27 @@ class UC2000Controller:
         def ops_outside(idx):
             self.percent = MIN_LASE_PERCENT
             return idx, &#34;&#34;
-
-        self.percent = MIN_LASE_PERCENT
-        self.lase = True
-        if self._open_labjack:
-            # Interval_number is 2*num_shots - 1 because the operations outside
-            # end the shot so need odd number of iterations to ensure correct
-            # number of shots
-            self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-            with self._open_labjack:
-                interval_metrics = self._open_labjack.interval.start_interval(
+        
+        # With statement turns off the laser with KB interrupt even without 
+        # using &#34;with&#34; outside the class. Still will wait until interval is finished
+        with self:
+            self.percent = MIN_LASE_PERCENT
+            self.lase = True
+            if self._daq:
+                # Interval_number is 2*num_shots - 1 because the operations outside
+                # end the shot so need odd number of iterations to ensure correct
+                # number of shots
+                self._daq.add_interval(int(shot_time*1e3), 2*num_shots - 1)
+                interval_metrics = self._daq.interval.start_interval(
                     operations_inside=ops_inside,
                     operations_outside=ops_outside
                     )
-        else:
-            interval_metrics = {}
-        self.percent = MIN_LASE_PERCENT
-        self.lase = False
-        self.shot_time_hist += [shot_time]*num_shots
-        return interval_metrics
+            else:
+                interval_metrics = {}
+            self.percent = MIN_LASE_PERCENT
+            self.lase = False
+            self.shot_time_hist += [shot_time]*num_shots
+            return interval_metrics
 
 
 # =============================================================================
@@ -1312,7 +1338,7 @@ def message_bytes(self):
 </dd>
 <dt id="uc2000.UC2000Controller"><code class="flex name class">
 <span>class <span class="ident">UC2000Controller</span></span>
-<span>(</span><span>model: int, open_labjack=False)</span>
+<span>(</span><span>model: int, daq=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>An interface to SYNRAD 48 series CO2 lasers through UC-2000 controller.</p>
@@ -1323,7 +1349,7 @@ settings are facilitated through the Serial RS-232 protocol and port.</p>
 <dt><strong><code>model</code></strong> :&ensp;<code>{25, 50}</code></dt>
 <dd>SYNRAD 48 series laser model number, indicates the maximum
 optical power output.</dd>
-<dt><strong><code>open_labjack</code></strong> :&ensp;<code>LabJack object</code></dt>
+<dt><strong><code>daq</code></strong> :&ensp;<code>LabJack object</code></dt>
 <dd>A LabJack object to transmit messages to the UC-2000,
 by default <code>False</code>.</dd>
 </dl>
@@ -1408,7 +1434,7 @@ command - maybe use to check option on laser</p>
     model : {25, 50}
         SYNRAD 48 series laser model number, indicates the maximum
         optical power output.
-    open_labjack : LabJack object
+    daq : LabJack object
         A LabJack object to transmit messages to the UC-2000,
         by default ``False``.
 
@@ -1496,11 +1522,11 @@ command - maybe use to check option on laser</p>
     # TODO: update RC params style?
     # TODO: set defaults list into controller as argument for changable settings
 
-    def __init__(self, model: int, open_labjack=False):
+    def __init__(self, model: int, daq=False):
         &#34;&#34;&#34;Inits a UC2000 object.&#34;&#34;&#34;
         self.model = model
 
-        self._open_labjack = open_labjack
+        self._daq = daq
 
         self.pwm_freq_hist = [None]
         self.gate_logic_hist = [None]
@@ -1522,18 +1548,17 @@ command - maybe use to check option on laser</p>
         return self
 
     def __exit__(self, exc_type, exc_value, exc_tb):
+        # Always turn laser off
+        self.percent = 0
+        self.lase = False
+
         if exc_type is KeyboardInterrupt:
             print(&#34;Laser process stopped by user&#34;)
-            self.percent = 0
-            self.lase = False
             # returning False because we want to allow nested with statements
             # above the stack to also use their __exit__ which turns the laser
             # off and low set percent.
             return False
 
-        # turn it down anyways
-        self.percent = 0
-        self.lase = False
         return exc_type is None
 
     @property
@@ -1568,9 +1593,9 @@ command - maybe use to check option on laser</p>
         self.lase_hist.append(state)
 
         # if the new option is the same as before don&#39;t send changes to labjack
-        if (self.lase_hist[-2] != state) and self._open_labjack:
+        if (self.lase_hist[-2] != state) and self._daq:
             msg = Message(&#34;lase&#34;, state, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def percent(self):
@@ -1605,9 +1630,9 @@ command - maybe use to check option on laser</p>
         self._percent = per
         self.percent_hist.append(per)
 
-        if self.percent_hist[-2] != per and self._open_labjack:
+        if self.percent_hist[-2] != per and self._daq:
             msg = Message(&#34;percent&#34;, per, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def pwm_freq(self):
@@ -1637,9 +1662,9 @@ command - maybe use to check option on laser</p>
         self._pwm_freq = freq
         self.pwm_freq_hist.append(freq)
 
-        if self.pwm_freq_hist[-2] != freq and self._open_labjack:
+        if self.pwm_freq_hist[-2] != freq and self._daq:
             msg = Message(&#34;pwm_freq&#34;, freq, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def gate_logic(self):
@@ -1680,9 +1705,9 @@ command - maybe use to check option on laser</p>
         self._gate_logic = pull
         self.gate_logic_hist.append(pull)
 
-        if self.gate_logic_hist[-2] != pull and self._open_labjack:
+        if self.gate_logic_hist[-2] != pull and self._daq:
             msg = Message(&#34;gate_logic&#34;, pull, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def max_pwm(self):
@@ -1711,9 +1736,9 @@ command - maybe use to check option on laser</p>
         self._max_pwm = per
         self.max_pwm_hist.append(per)
 
-        if self.max_pwm_hist[-2] != per and self._open_labjack:
+        if self.max_pwm_hist[-2] != per and self._daq:
             msg = Message(&#34;max_pwm&#34;, per, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def lase_on_power_up(self):
@@ -1742,9 +1767,9 @@ command - maybe use to check option on laser</p>
         self._lase_on_power_up = pwr
         self.lase_on_power_up_hist.append(pwr)
 
-        if self.lase_on_power_up_hist[-2] != pwr and self._open_labjack:
+        if self.lase_on_power_up_hist[-2] != pwr and self._daq:
             msg = Message(&#34;lase_on_power_up&#34;, pwr, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def mode(self):
@@ -1790,9 +1815,9 @@ command - maybe use to check option on laser</p>
         self._mode = mode_type.lower()
         self.mode_hist.append(mode_type)
 
-        if self.mode_hist[-2] != mode_type and self._open_labjack:
+        if self.mode_hist[-2] != mode_type and self._daq:
             msg = Message(&#34;mode&#34;, mode_type, self.checksum).message_bytes
-            self._open_labjack.asynch.transmit(msg)
+            self._daq.asynch.transmit(msg)
 
     @property
     def checksum(self):
@@ -1985,25 +2010,27 @@ command - maybe use to check option on laser</p>
         def ops_outside(idx):
             self.percent = MIN_LASE_PERCENT
             return idx, &#34;&#34;
-
-        self.percent = MIN_LASE_PERCENT
-        self.lase = True
-        if self._open_labjack:
-            # Interval_number is 2*num_shots - 1 because the operations outside
-            # end the shot so need odd number of iterations to ensure correct
-            # number of shots
-            self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-            with self._open_labjack:
-                interval_metrics = self._open_labjack.interval.start_interval(
+        
+        # With statement turns off the laser with KB interrupt even without 
+        # using &#34;with&#34; outside the class. Still will wait until interval is finished
+        with self:
+            self.percent = MIN_LASE_PERCENT
+            self.lase = True
+            if self._daq:
+                # Interval_number is 2*num_shots - 1 because the operations outside
+                # end the shot so need odd number of iterations to ensure correct
+                # number of shots
+                self._daq.add_interval(int(shot_time*1e3), 2*num_shots - 1)
+                interval_metrics = self._daq.interval.start_interval(
                     operations_inside=ops_inside,
                     operations_outside=ops_outside
                     )
-        else:
-            interval_metrics = {}
-        self.percent = MIN_LASE_PERCENT
-        self.lase = False
-        self.shot_time_hist += [shot_time]*num_shots
-        return interval_metrics</code></pre>
+            else:
+                interval_metrics = {}
+            self.percent = MIN_LASE_PERCENT
+            self.lase = False
+            self.shot_time_hist += [shot_time]*num_shots
+            return interval_metrics</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -2264,25 +2291,27 @@ the shot time.</p>
     def ops_outside(idx):
         self.percent = MIN_LASE_PERCENT
         return idx, &#34;&#34;
-
-    self.percent = MIN_LASE_PERCENT
-    self.lase = True
-    if self._open_labjack:
-        # Interval_number is 2*num_shots - 1 because the operations outside
-        # end the shot so need odd number of iterations to ensure correct
-        # number of shots
-        self._open_labjack.add_interval(int(shot_time*1e3), 2*num_shots - 1)
-        with self._open_labjack:
-            interval_metrics = self._open_labjack.interval.start_interval(
+    
+    # With statement turns off the laser with KB interrupt even without 
+    # using &#34;with&#34; outside the class. Still will wait until interval is finished
+    with self:
+        self.percent = MIN_LASE_PERCENT
+        self.lase = True
+        if self._daq:
+            # Interval_number is 2*num_shots - 1 because the operations outside
+            # end the shot so need odd number of iterations to ensure correct
+            # number of shots
+            self._daq.add_interval(int(shot_time*1e3), 2*num_shots - 1)
+            interval_metrics = self._daq.interval.start_interval(
                 operations_inside=ops_inside,
                 operations_outside=ops_outside
                 )
-    else:
-        interval_metrics = {}
-    self.percent = MIN_LASE_PERCENT
-    self.lase = False
-    self.shot_time_hist += [shot_time]*num_shots
-    return interval_metrics</code></pre>
+        else:
+            interval_metrics = {}
+        self.percent = MIN_LASE_PERCENT
+        self.lase = False
+        self.shot_time_hist += [shot_time]*num_shots
+        return interval_metrics</code></pre>
 </details>
 </dd>
 </dl>
@@ -2294,9 +2323,10 @@ the shot time.</p>
 <h1>Index</h1>
 <div class="toc">
 <ul>
-<li><a href="#synrad-uc2000-controller">Synrad UC2000 Controller</a><ul>
+<li><a href="#synrad-uc2000">Synrad-UC2000</a><ul>
 <li><a href="#requirements">Requirements</a></li>
 <li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
 <li><a href="#todo">TODO</a></li>
 </ul>
 </li>
