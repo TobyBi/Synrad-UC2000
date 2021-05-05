@@ -39,8 +39,32 @@ The less frequently changed settings of the laser and controller are:
 - PWM frequency,
 - gate logic,
 - max PWM percent,
+- lase on power up,
 - controller mode, and
 - checksum.
+
+Refer to the [documentation](https://tobybi.github.io/Synrad-UC2000/uc2000.html) for the available options of each.
+
+
+
+For `pwm_freq`, `gate_logic`, `lase`, `lase_on_power_up`, `max_pwm`, `mode`, and `percent` are treated as class variables and are set with the following syntax
+
+```python
+laser = UC2000Controller(25)
+laser.pwm_freq = 5
+laser.mode = "manual"
+```
+
+The `shoot` function is used like this
+
+```python
+laser = UC2000Controller(25)
+laser.shoot(
+	percent=50 # in %
+    shot_time=1000 # in ms
+    num_shots=1
+)
+```
 
 
 

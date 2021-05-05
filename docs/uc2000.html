@@ -47,9 +47,24 @@
 <li>PWM frequency,</li>
 <li>gate logic,</li>
 <li>max PWM percent,</li>
+<li>lase on power up,</li>
 <li>controller mode, and</li>
 <li>checksum.</li>
 </ul>
+<p>Refer to the <a href="https://tobybi.github.io/Synrad-UC2000/uc2000.html">documentation</a> for the available options of each.</p>
+<p>For <code>pwm_freq</code>, <code>gate_logic</code>, <code>lase</code>, <code>lase_on_power_up</code>, <code>max_pwm</code>, <code>mode</code>, and <code>percent</code> are treated as class variables and are set with the following syntax</p>
+<pre><code class="language-python">laser = UC2000Controller(25)
+laser.pwm_freq = 5
+laser.mode = &quot;manual&quot;
+</code></pre>
+<p>The <code>shoot</code> function is used like this</p>
+<pre><code class="language-python">laser = UC2000Controller(25)
+laser.shoot(
+    percent=50 # in %
+    shot_time=1000 # in ms
+    num_shots=1
+)
+</code></pre>
 <p>If you are using <code>lase</code> and <code>percent</code> functions with any other modules that include premature termination of the program, make sure to execute the commands within a <a href="https://docs.python.org/3/library/contextlib.html">context manager</a> e.g.</p>
 <pre><code class="language-python">laser = UC2000Controller(25)
 with laser:
@@ -653,8 +668,7 @@ class UC2000Controller:
         Examples
         --------
         &gt;&gt;&gt; laser = UC2000Controller(model=25)
-        &gt;&gt;&gt; with laser:
-        ...     laser.shoot(10, 500, 2)
+        &gt;&gt;&gt; laser.shoot(10, 500, 2)
 
         Fires 2 shots for 500ms at 10% PWM duty cycle percent.
         &#34;&#34;&#34;
@@ -1988,8 +2002,7 @@ command - maybe use to check option on laser</p>
         Examples
         --------
         &gt;&gt;&gt; laser = UC2000Controller(model=25)
-        &gt;&gt;&gt; with laser:
-        ...     laser.shoot(10, 500, 2)
+        &gt;&gt;&gt; laser.shoot(10, 500, 2)
 
         Fires 2 shots for 500ms at 10% PWM duty cycle percent.
         &#34;&#34;&#34;
@@ -2227,8 +2240,7 @@ accurate.</p>
 the shot time.</p>
 <h2 id="examples">Examples</h2>
 <pre><code class="language-python-repl">&gt;&gt;&gt; laser = UC2000Controller(model=25)
-&gt;&gt;&gt; with laser:
-...     laser.shoot(10, 500, 2)
+&gt;&gt;&gt; laser.shoot(10, 500, 2)
 </code></pre>
 <p>Fires 2 shots for 500ms at 10% PWM duty cycle percent.</p></div>
 <details class="source">
@@ -2269,8 +2281,7 @@ the shot time.</p>
     Examples
     --------
     &gt;&gt;&gt; laser = UC2000Controller(model=25)
-    &gt;&gt;&gt; with laser:
-    ...     laser.shoot(10, 500, 2)
+    &gt;&gt;&gt; laser.shoot(10, 500, 2)
 
     Fires 2 shots for 500ms at 10% PWM duty cycle percent.
     &#34;&#34;&#34;

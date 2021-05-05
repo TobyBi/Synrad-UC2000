@@ -582,8 +582,7 @@ class UC2000Controller:
         Examples
         --------
         >>> laser = UC2000Controller(model=25)
-        >>> with laser:
-        ...     laser.shoot(10, 500, 2)
+        >>> laser.shoot(10, 500, 2)
 
         Fires 2 shots for 500ms at 10% PWM duty cycle percent.
         """
