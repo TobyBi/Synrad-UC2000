@@ -228,6 +228,9 @@ class UC2000Controller:
             msg = Message("percent", per, self.checksum).message_bytes
             self._daq.asynch.transmit(msg)
 
+    def set_min_percent(self):
+        self.percent = MIN_LASE_PERCENT
+
     @property
     def pwm_freq(self):
         """Return laser PWM frequency."""
@@ -625,6 +628,38 @@ class UC2000Controller:
             self.shot_time_hist += [shot_time]*num_shots
             return interval_metrics
 
+    def hot_shoot(self, shot_percent: float, shot_time: float, num_shots: int):
+        shot_time = self._shot_time_limits(shot_time)
+        # Convert shot_time to microseconds
+
+        # operations inside the interval.. Labjack interval ensures that the
+        # percent should be this for the selected shot_time
+        def ops_inside(idx):
+            if idx % 2 == 0:
+                self.percent = shot_percent
+            elif idx % 2 == 1:
+                self.percent = MIN_LASE_PERCENT
+            return idx + 1, ""
+
+        # operations outside the interval occur as soon as the host sends the
+        # command to Labjack
+        def ops_outside(idx):
+            self.percent = MIN_LASE_PERCENT
+            return idx, ""
+        
+        if self._daq:
+            # Interval_number is 2*num_shots - 1 because the operations outside
+            # end the shot so need odd number of iterations to ensure correct
+            # number of shots
+            self._daq.add_interval(int(shot_time*1e3), 2*num_shots - 1)
+            interval_metrics = self._daq.interval.start_interval(
+                operations_inside=ops_inside,
+                operations_outside=ops_outside
+                )
+        else:
+            interval_metrics = {}
+        self.shot_time_hist += [shot_time]*num_shots
+        return interval_metrics
 
 # =============================================================================
 # Parameters for Message object
